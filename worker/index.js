@@ -24,7 +24,7 @@ export default {
     const p = url.pathname;
     if (p.startsWith('/assets/')) res.headers.set('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=86400');
     else if (/\.(svg|png|xml|txt)$/.test(p)) res.headers.set('Cache-Control', 'public, max-age=86400');
-    else res.headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+    else res.headers.set('Cache-Control', 'public, max-age=0, must-revalidate, no-transform');
     return res;
   },
 };

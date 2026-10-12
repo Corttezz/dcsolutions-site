@@ -222,3 +222,4 @@ em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.0
 .doc a{color:var(--coral-escuro);text-underline-offset:3px}
 .doc-topo{background:var(--tinta)}
 .h404{padding-bottom:160px;min-height:80vh}
+.doc-topo .topo{position:relative}.doc{padding-top:clamp(56px,8vw,96px)}

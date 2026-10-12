@@ -49,8 +49,8 @@ const jsonld = JSON.stringify({
 
 const PAGINAS = [
   ['index.html', 'index.html'],
-  ['privacidade/index.html', 'privacidade/index.html'],
-  ['termos/index.html', 'termos/index.html'],
+  ['privacidade/index.html', 'privacidade.html'],
+  ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
 for (const [src, dst] of PAGINAS) {
