@@ -223,3 +223,26 @@ em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.0
 .doc-topo{background:var(--tinta)}
 .h404{padding-bottom:160px;min-height:80vh}
 .doc-topo .topo{position:relative}.doc{padding-top:clamp(56px,8vw,96px)}
+
+/* ---------- Grimoire (jogo) ---------- */
+.grim{--tom:#d9a441;--txt:#efe2c4;--txt2:rgba(239,226,196,.74);background:#1a110d;color:var(--txt);border-radius:var(--raio);overflow:hidden;position:relative;box-shadow:inset 0 0 0 1px rgba(217,164,65,.22)}
+.grim-capa{position:relative;aspect-ratio:1600/517;overflow:hidden}
+@media (max-width:760px){.grim-capa{aspect-ratio:auto;height:210px}.grim-logo{width:78%}}
+.grim-fundo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated}
+.grim-capa::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(26,17,13,0) 40%,#1a110d),linear-gradient(to right,rgba(26,17,13,.55),transparent 55%)}
+.grim-logo{position:absolute;z-index:1;left:clamp(24px,4.5vw,64px);bottom:clamp(18px,3vw,40px);width:min(460px,70%)}
+.grim-logo img{width:100%;height:auto;image-rendering:pixelated;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
+.grim-corpo{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,56px);align-items:start;padding:clamp(8px,1.5vw,16px) clamp(28px,4.5vw,64px) clamp(28px,4.5vw,64px)}
+.grim .prod-cab img{image-rendering:pixelated;border-radius:50%}
+.grim-tipo{font-size:clamp(20px,2vw,24px);font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.grim-tipo .dom{color:var(--txt2)}
+.grim .estado{background:rgba(217,164,65,.12);color:#f3d79a}
+.grim .estado::before{background:#a8322a}
+.grim .prod-frase em{color:var(--tom)}
+.galeria{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:clamp(0px,1vw,8px)}
+.galeria li{border-radius:10px;overflow:hidden;background:#000;box-shadow:0 0 0 1px rgba(217,164,65,.28),0 18px 36px -18px rgba(0,0,0,.7)}
+.galeria img{width:100%;height:auto;aspect-ratio:16/9}
+@media (max-width:900px){.grim-corpo{grid-template-columns:1fr}}
+.arco .c-grim{background:linear-gradient(160deg,#5a2a1f,#1a110d);color:#f3d79a}
+.arco .c-grim img{image-rendering:pixelated;border-radius:50%}
+.breve{font-size:12px;color:#8a867e;margin-left:6px}

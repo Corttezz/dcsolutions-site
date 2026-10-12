@@ -44,6 +44,7 @@ const jsonld = JSON.stringify({
     { '@type': 'Brand', name: 'IQNorth', url: 'https://iqnorth.com/' },
     { '@type': 'Brand', name: 'Fytform', url: 'https://fytform.com/' },
     { '@type': 'Brand', name: 'H2HScout', url: 'https://h2hscout.com/' },
+    { '@type': 'Brand', name: 'Grimoire' },
   ],
 });
 
