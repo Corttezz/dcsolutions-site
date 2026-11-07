@@ -15,5 +15,6 @@
     { "pattern": "dcsolutions.app", "custom_domain": true },
     { "pattern": "www.dcsolutions.app", "custom_domain": true }
   ],
+  "vars": { "VITRINE_V2": "1" },
   "observability": { "enabled": true }
 }

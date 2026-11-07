@@ -48,16 +48,18 @@ const jsonld = JSON.stringify({
   ],
 });
 
+// [fonte, saída, rodapé próprio opcional]. vitrine-v2.html é servida pelo Worker só com VITRINE_V2=1.
 const PAGINAS = [
   ['index.html', 'index.html'],
+  ['index-v2.html', 'vitrine-v2.html', 'partes/rodape-v2.html'],
   ['privacidade/index.html', 'privacidade.html'],
   ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
-for (const [src, dst] of PAGINAS) {
+for (const [src, dst, rod] of PAGINAS) {
   let s = ler(src)
     .replaceAll('{{TOPO}}', topo)
-    .replaceAll('{{RODAPE}}', rodape)
+    .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', marca) : rodape)
     .replaceAll('{{CSS}}', css)
     .replaceAll('{{CABECA_JS}}', cab)
     .replaceAll('{{CORPO_JS}}', corpo)
