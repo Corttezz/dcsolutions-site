@@ -1,0 +1,68 @@
+// Prints novos dos produtos (sites no ar) em webp, para a vitrine v3.
+// Celular: tela do topo, 360x780 @2x. H2HScout: só o painel "Exemplo de leitura" (o topo do site fala de lista de espera).
+// uso: node ferramentas/prints-v3.mjs
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+const require = createRequire('E:/dev/projects/Tiktok-accounts/package.json');
+const { chromium } = require('playwright-core');
+
+const R = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = path.join(R, 'src/assets/v3/prints');
+fs.mkdirSync(OUT, { recursive: true });
+const b = await chromium.launch({ executablePath: 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe', headless: true });
+
+// png -> webp em várias larguras, pelo canvas do próprio navegador
+const conv = await b.newPage();
+async function webp(png, nome, larguras) {
+  const src = 'data:image/png;base64,' + png.toString('base64');
+  for (const w of larguras) {
+    const d = await conv.evaluate(async ([src, w]) => {
+      const i = new Image(); i.src = src; await i.decode();
+      const c = document.createElement('canvas'); c.width = w; c.height = Math.round(i.height * w / i.width);
+      const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(i, 0, 0, c.width, c.height);
+      return [c.toDataURL('image/webp', 0.8), c.height];
+    }, [src, w]);
+    fs.writeFileSync(path.join(OUT, `${nome}-${w}.webp`), Buffer.from(d[0].split(',')[1], 'base64'));
+    console.log(nome, w + 'x' + d[1]);
+  }
+}
+
+const cel = await b.newContext({ viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'pt-BR' });
+for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'https://fytform.com/']]) {
+  const p = await cel.newPage();
+  await p.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(2500);
+  await webp(await p.screenshot(), nome + '-cel', [300, 600]);
+  await p.close();
+}
+{
+  const dk = await b.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2, locale: 'pt-BR' });
+  const p = await dk.newPage();
+  await p.goto('https://h2hscout.com/', { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(2500);
+  // sobe do texto do painel até o cartão inteiro
+  const texto = await p.getByText(/criou chance/i).first().evaluate((e) => {
+    // o maior ancestral que ainda não traz a promessa de lista de espera
+    while (e.parentElement && !/lista de espera|cadastr|vital[ií]ci/i.test(e.parentElement.innerText)) e = e.parentElement;
+    e.setAttribute('data-v3', '1');
+    return e.innerText;
+  });
+  // trava: o recorte não pode ter a promessa de lista de espera/cadastro
+  if (/lista de espera|cadastr|vital[ií]ci/i.test(texto)) throw new Error('painel do H2HScout com texto proibido');
+  await p.waitForTimeout(1500);
+  await webp(await p.locator('[data-v3]').screenshot(), 'h2hscout-painel', [420, 840]);
+  await dk.close();
+}
+await cel.close();
+
+const desk = await b.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1, locale: 'pt-BR' });
+{
+  const p = await desk.newPage();
+  await p.goto('https://ismeirecortez.com/', { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(2500);
+  await webp(await p.screenshot(), 'ismeirecortez-desk', [640, 1120]);
+  await p.close();
+}
+await b.close();

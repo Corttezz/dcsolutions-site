@@ -13,12 +13,15 @@ fs.mkdirSync(D, { recursive: true });
 for (const f of fs.readdirSync(D)) fs.rmSync(path.join(D, f), { recursive: true, force: true });
 
 const ler = (f) => fs.readFileSync(path.join(S, f), 'utf8');
-const css = ler('css/site.css')
+const minCss = (f) => ler(f)
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/\s*\n\s*/g, '')
   .replace(/\s*([{};,])\s*/g, '$1')
   .replace(/;}/g, '}');
+const css = minCss('css/site.css');
 const marca = ler('assets/marca.svg').trim().replace('<svg ', '<svg aria-hidden="true" ');
+// marca da v3 (etiqueta), com classes para trocar as cores no claro e no escuro
+const marcaV3 = '<svg class="etq" viewBox="3 8 42 32" aria-hidden="true"><rect class="etq-f" x="3" y="8" width="42" height="32" rx="3"/><rect class="etq-p" x="6" y="11" width="36" height="26" rx="1.5"/><path class="etq-l" d="M13.5 15.5V32.5H17A4.6 8.5 0 0 0 17 15.5Z"/><path class="etq-l" d="M33.24 17.04A4.6 8.5 0 1 0 33.24 30.96"/></svg>';
 const topo = ler('partes/topo.html').replaceAll('{{MARCA}}', marca);
 const rodape = ler('partes/rodape.html').replaceAll('{{MARCA}}', marca);
 const cab = ler('js/cabeca.js').trim();
@@ -48,19 +51,23 @@ const jsonld = JSON.stringify({
   ],
 });
 
-// [fonte, saída, rodapé próprio opcional]. vitrine-v2.html é servida pelo Worker só com VITRINE_V2=1.
+// [fonte, saída, rodapé próprio opcional, v3]. vitrine-v2.html é servida pelo Worker só com VITRINE_V2=1.
+// vitrine-v3.html (revisão 08/11) é só preview: CSS, topo e marca próprios; o Worker ainda não a liga.
 const PAGINAS = [
   ['index.html', 'index.html'],
   ['index-v2.html', 'vitrine-v2.html', 'partes/rodape-v2.html'],
+  ['index-v3.html', 'vitrine-v3.html', 'partes/rodape-v3.html', true],
   ['privacidade/index.html', 'privacidade.html'],
   ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
-for (const [src, dst, rod] of PAGINAS) {
+const cssV3 = minCss('css/v3.css');
+for (const [src, dst, rod, v3] of PAGINAS) {
+  const m = v3 ? marcaV3 : marca;
   let s = ler(src)
-    .replaceAll('{{TOPO}}', topo)
-    .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', marca) : rodape)
-    .replaceAll('{{CSS}}', css)
+    .replaceAll('{{TOPO}}', v3 ? ler('partes/topo-v3.html').replaceAll('{{MARCA}}', m) : topo)
+    .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', m) : rodape)
+    .replaceAll('{{CSS}}', v3 ? cssV3 : css)
     .replaceAll('{{CABECA_JS}}', cab)
     .replaceAll('{{CORPO_JS}}', corpo)
     .replaceAll('{{JSONLD}}', jsonld);
