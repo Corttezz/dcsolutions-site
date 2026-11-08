@@ -34,7 +34,20 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
   const p = await cel.newPage();
   await p.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
   await p.waitForTimeout(2500);
-  await webp(await p.screenshot(), nome + '-cel', [300, 600]);
+  // regra do Fytform (e geral): sem preço nem forma de pagamento no print. Corta a tela acima da primeira linha com "R$".
+  const corte = await p.evaluate(() => {
+    let topo = innerHeight;
+    for (const e of document.querySelectorAll('body *')) {
+      const proprio = [...e.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' ');
+      if (!/R\$|PIX|grátis|gratuito/i.test(proprio)) continue;
+      const r = e.getBoundingClientRect();
+      if (r.width && r.bottom > 0 && r.top < topo) topo = r.top;
+    }
+    return Math.floor(topo);
+  });
+  const altura = Math.min(780, corte - 16);
+  if (altura < 500) throw new Error(nome + ': preço alto demais na tela, print ficaria curto');
+  await webp(await p.screenshot({ clip: { x: 0, y: 0, width: 360, height: altura } }), nome + '-cel', [300, 600]);
   await p.close();
 }
 {
@@ -49,6 +62,15 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
     e.setAttribute('data-v3', '1');
     return e.innerText;
   });
+  // escudos de clubes e o selo do Brasileirão estão na lista "não pode" do H2H: tira as linhas com imagem
+  await p.locator('[data-v3]').evaluate((raiz) => {
+    for (const i of raiz.querySelectorAll('img,svg image,picture')) {
+      let e = i;
+      while (e.parentElement && e.parentElement !== raiz && e.parentElement.getBoundingClientRect().height < 100) e = e.parentElement;
+      e.style.display = 'none';
+    }
+  });
+  if (await p.locator('[data-v3] img:visible').count()) throw new Error('painel do H2HScout ainda com imagem (escudo)');
   // trava: o recorte não pode ter a promessa de lista de espera/cadastro
   if (/lista de espera|cadastr|vital[ií]ci/i.test(texto)) throw new Error('painel do H2HScout com texto proibido');
   await p.waitForTimeout(1500);
