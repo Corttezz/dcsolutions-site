@@ -140,37 +140,8 @@ const primeiroPreco = (p) => p.evaluate(() => {
   await webp(await p.screenshot({ clip: { x: 0, y: 0, width: 360, height: fundo } }), 'fytform-plano', [300, 600]);
   await p.close();
 }
-{
-  // v1 e v2 (arco do hero e card): celular 1:2, cortado acima da linha de preço
-  const p = await cel.newPage();
-  await p.goto('https://fytform.com/', { waitUntil: 'networkidle', timeout: 60000 });
-  await p.waitForTimeout(2500);
-  const topo = await primeiroPreco(p);
-  const h = Math.floor(topo - 12), w = Math.floor(h / 2);
-  if (w > 360 || h < 560) throw new Error('fytform v1/v2 celular: corte fora do esperado');
-  const vistos = await proibidosNaTela(p, 0, h);
-  if (vistos.length) throw new Error('fytform v1/v2 celular com termo proibido: ' + vistos.join(' | '));
-  const RAIZ = path.join(R, 'src/assets/prints');
-  const png = await p.screenshot({ clip: { x: 0, y: 0, width: w, height: h } });
-  await webp(png, 'fytform-m', [240, 480], null, 'image/png', RAIZ);
-  await p.close();
-}
+// Prints da v1 e da v2 (fytform-d-*, fytform-m-* etc.): agora vêm de ferramentas/prints-v2.mjs (hotfix de 08/11).
 await cel.close();
-{
-  // v1 e v2 (janela do card): desktop 16:10, cortado acima da linha de preço
-  const dk = await b.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2, locale: 'pt-BR' });
-  const p = await dk.newPage();
-  await p.goto('https://fytform.com/', { waitUntil: 'networkidle', timeout: 60000 });
-  await p.waitForTimeout(2500);
-  const topo = await primeiroPreco(p);
-  const h = Math.floor(topo - 12), w = Math.round(h * 1.6);
-  if (w > 1280 || h < 500) throw new Error('fytform v1/v2 desktop: corte fora do esperado');
-  const vistos = await proibidosNaTela(p, 0, h);
-  if (vistos.length) throw new Error('fytform v1/v2 desktop com termo proibido: ' + vistos.join(' | '));
-  const RAIZ = path.join(R, 'src/assets/prints');
-  await webp(await p.screenshot({ clip: { x: 0, y: 0, width: w, height: h } }), 'fytform-d', [640, 1120], null, 'image/png', RAIZ);
-  await dk.close();
-}
 
 // H2HScout, celular (D2, decidido pelos Leads em 08/11): tela da plataforma da landing, sem a barra de navegação do topo.
 await webp(fs.readFileSync('E:/dev/projects/h2hscout-landing/landing/img/demo-ofensiva-cel-860.webp'), 'h2hscout-cel', [300, 600], [0, 128, 860, 1112], 'image/webp');
