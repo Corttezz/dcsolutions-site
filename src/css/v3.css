@@ -169,7 +169,9 @@ ul{padding:0;list-style:none}
 .m-ic>p{color:#3e5a53}
 .m-ic .prod-cab img{background:#e7efe9;padding:6px}
 .m-ic .print{border-radius:10px;overflow:hidden;border:1px solid rgba(15,94,78,.18)}
-.m-ic .print img{width:100%;height:auto;aspect-ratio:16/10}
+.m-ic .print img{width:100%;height:auto}
+.m-ic .print-cel{display:none;width:min(220px,70%);align-self:center;border-radius:26px;border:6px solid #0f3a31}
+@media (max-width:600px){.m-ic .print-cel{display:block}.m-ic .print-desk{display:none}}
 .link{align-self:flex-start;font-weight:600;text-decoration:none;border-bottom:2px solid currentColor;padding:2px 0}
 .link:hover{color:var(--anil)}
 

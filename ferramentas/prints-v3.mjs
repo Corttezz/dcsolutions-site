@@ -30,7 +30,7 @@ async function webp(png, nome, larguras) {
 }
 
 const cel = await b.newContext({ viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'pt-BR' });
-for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'https://fytform.com/']]) {
+for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'https://fytform.com/'], ['ismeirecortez', 'https://ismeirecortez.com/']]) {
   const p = await cel.newPage();
   await p.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
   await p.waitForTimeout(2500);
@@ -79,12 +79,16 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
 }
 await cel.close();
 
-const desk = await b.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1, locale: 'pt-BR' });
-{
+// Ismeire desktop: print oficial de 08/11 (via Produtos), se existir; senão, tira do site público.
+const OFICIAL = 'C:/Users/corte/OpenBot/Shared/vitrine-revisao/ismeire/ismeirecortez-home-desktop-1440-20261108.png';
+if (fs.existsSync(OFICIAL)) {
+  await webp(fs.readFileSync(OFICIAL), 'ismeirecortez-desk', [640, 1120]);
+} else {
+  const desk = await b.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, locale: 'pt-BR' });
   const p = await desk.newPage();
   await p.goto('https://ismeirecortez.com/', { waitUntil: 'networkidle', timeout: 60000 });
   await p.waitForTimeout(2500);
   await webp(await p.screenshot(), 'ismeirecortez-desk', [640, 1120]);
-  await p.close();
+  await desk.close();
 }
 await b.close();
