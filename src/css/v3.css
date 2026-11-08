@@ -37,15 +37,12 @@ ul{padding:0;list-style:none}
 .pular{position:absolute;left:12px;top:-60px;z-index:50;background:var(--algodao);color:var(--anil);padding:10px 14px;border-radius:8px;font-weight:600;text-decoration:none}
 .pular:focus{top:12px}
 
-/* marca: etiqueta. Cores por variável para servir no claro e no escuro */
-.etq{width:42px;height:32px;flex:none}
-.etq-f{fill:var(--etq-fundo,var(--anil))}
-.etq-l{fill:none;stroke:var(--etq-letra,var(--algodao));stroke-width:3.6}
-.etq-p{fill:none;stroke:var(--etq-letra,var(--algodao));stroke-opacity:.55;stroke-width:1;stroke-dasharray:2 1.6}
+/* marca: logo B "Anel", na cor do texto (currentColor) */
+.anel{width:36px;height:36px;flex:none}
 .marca{display:inline-flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--cond);font-weight:600;font-size:24px;letter-spacing:.005em;line-height:1}
 
 /* ---------- topo ---------- */
-.topo{background:var(--anil);color:var(--algodao);--etq-fundo:var(--algodao);--etq-letra:var(--anil)}
+.topo{background:var(--anil);color:var(--algodao)}
 .topo .wrap{display:flex;align-items:center;justify-content:space-between;height:80px}
 .topo nav{display:flex;align-items:center;gap:4px}
 .topo nav a{text-decoration:none;font-size:16px;padding:9px 14px;border-radius:8px;color:var(--nevoa);transition:color .2s,background-color .2s}
@@ -161,7 +158,7 @@ ul{padding:0;list-style:none}
 .extra{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(18px,2vw,28px);margin-top:clamp(18px,2vw,28px);align-items:stretch}
 @media (max-width:900px){.extra{grid-template-columns:1fr}}
 .mini{border-radius:var(--raio);padding:clamp(24px,3vw,40px);display:flex;flex-direction:column;gap:16px}
-.mini .prod-cab img{width:48px;height:48px;border-radius:11px}
+.mini .prod-cab img{width:56px;height:56px;border-radius:13px}
 .mini h3{font-family:var(--cond);font-weight:700;font-size:clamp(28px,2.6vw,34px);line-height:1}
 .mini p{text-wrap:pretty}
 .m-pg{background:#0f2a28;color:#e6fffb;--tom:#5eead4;position:relative;overflow:hidden;isolation:isolate}
@@ -198,7 +195,7 @@ ul{padding:0;list-style:none}
 @media (max-width:900px){.contato .wrap{grid-template-columns:1fr}.email{justify-self:start;font-size:clamp(20px,6vw,28px);padding:14px 20px}}
 
 /* ---------- rodapé ---------- */
-.rodape{background:var(--anil-fundo);color:var(--nevoa);padding:clamp(56px,7vw,88px) 0 32px;font-size:15px;--etq-fundo:var(--algodao);--etq-letra:var(--anil-fundo)}
+.rodape{background:var(--anil-fundo);color:var(--nevoa);padding:clamp(56px,7vw,88px) 0 32px;font-size:15px}
 .rod-grade{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:36px}
 .rod-marca .marca{color:var(--algodao)}
 .rod-marca p{margin-top:16px;max-width:24em}
