@@ -86,11 +86,7 @@ async function plano(ctx, clipDe) {
   await dk.close();
 }
 
-// H2HScout (telas da plataforma; OK do H2H Lead para os escudos, via Lead, 08/11).
-// Desktop: sem a barra do topo (abas "Cartola" e "Apostas", selo "Brasileirão 2026") e sem o cursor do canto; 16:10.
-await webp(fs.readFileSync(H2H + 'demo-ofensiva-1800.webp'), 'image/webp', PRINTS, 'h2hscout-d', [640, 1120], [0, 104, 1626, 1016]);
-// Celular 1:2: sem a barra de navegação do topo.
-await webp(fs.readFileSync(H2H + 'demo-ofensiva-cel-860.webp'), 'image/webp', PRINTS, 'h2hscout-m', [240, 480], [0, 128, 556, 1112]);
+// H2HScout: os prints agora saem de ferramentas/h2h-sem-escudos.mjs (escudos cobertos, 08/11).
 
 // Grimoire (pacote v2). Os nomes de arquivo e os textos alternativos da v2 ficam; cada tela nova bate com o alt do lugar dela.
 await webp(fs.readFileSync(SHOTS + '06_crossroads.png'), 'image/png', GRIM, 'hero', [800, 1600], [110, 150, 1700, 549]);
