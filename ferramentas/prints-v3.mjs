@@ -77,6 +77,26 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
   await webp(await p.locator('[data-v3]').screenshot(), 'h2hscout-painel', [420, 840]);
   await dk.close();
 }
+{
+  // IQNorth: relatório de exemplo (material indicado pelo IQNorth Lead): o celular do topo de /recursos/relatorio, tela "Por área".
+  const dk = await b.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2, locale: 'pt-BR' });
+  const p = await dk.newPage();
+  await p.goto('https://iqnorth.com/recursos/relatorio', { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(2500);
+  const proibido = /R\$|grátis|gratuito|oficial|cl[ií]nic|laudo|diagn[oó]stic|psicol[oó]gic|Mensa|usu[aá]rios|vendas/i;
+  const texto = await p.getByText('Por área', { exact: true }).first().evaluate((e) => {
+    // sobe até o aparelho inteiro (alto e estreito)
+    while (e.parentElement && !(e.getBoundingClientRect().height >= 560 && e.getBoundingClientRect().height <= 760 && e.getBoundingClientRect().width < 420)) e = e.parentElement;
+    e.setAttribute('data-v3', '1');
+    // esconde os selos flutuantes da página que encostam no aparelho
+    for (const o of document.querySelectorAll('body *')) if (!o.contains(e) && !e.contains(o)) o.style.visibility = 'hidden';
+    return e.innerText;
+  });
+  const achado = texto.match(new RegExp('.{0,40}(' + proibido.source + ').{0,40}', 'i'));
+  if (achado) throw new Error('relatório do IQNorth com termo proibido: ' + achado[0].replace(/\s+/g, ' '));
+  await webp(await p.locator('[data-v3]').screenshot(), 'iqnorth-relatorio', [300, 600]);
+  await dk.close();
+}
 await cel.close();
 
 // Ismeire desktop: print oficial de 08/11 (via Produtos), se existir; senão, tira do site público.

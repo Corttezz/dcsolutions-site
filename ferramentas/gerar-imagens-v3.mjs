@@ -21,7 +21,7 @@ const tags = [
   ['#3a34c4', '#f7f5f0', 'IQNorth', 'assets/v3/logos/iqnorth.svg', -2],
   ['#84cc16', '#06080f', 'Fytform', 'assets/v3/logos/fytform.svg', 1.5],
   ['#f6b73c', '#14201b', 'H2HScout', 'assets/v3/logos/h2hscout.svg', -1],
-  ['#2a1a12', '#efe2c4', 'Grimoire', 'assets/v3/logos/grimoire.webp', 2],
+  ['#2a1a12', '#efe2c4', 'Grimoire', 'assets/v3/grimoire/icone-112.webp', 2],
 ];
 const og = `<html><head><style>${fontes}
 body{margin:0;width:1200px;height:630px;background:#1f2d4d;color:#f1f2ee;font-family:B;position:relative;overflow:hidden}
