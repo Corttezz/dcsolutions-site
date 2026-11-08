@@ -13,12 +13,15 @@ fs.mkdirSync(D, { recursive: true });
 for (const f of fs.readdirSync(D)) fs.rmSync(path.join(D, f), { recursive: true, force: true });
 
 const ler = (f) => fs.readFileSync(path.join(S, f), 'utf8');
-const css = ler('css/site.css')
+const minCss = (f) => ler(f)
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/\s*\n\s*/g, '')
   .replace(/\s*([{};,])\s*/g, '$1')
   .replace(/;}/g, '}');
+const css = minCss('css/site.css');
 const marca = ler('assets/marca.svg').trim().replace('<svg ', '<svg aria-hidden="true" ');
+// marca da v3: logo B "Anel" (aprovado pelo Daniel em 08/11), em currentColor para servir no claro e no escuro
+const marcaV3 = '<svg class="anel" viewBox="0 0 48 48" aria-hidden="true"><path d="M37 13.1A17 17 0 1 0 37 34.9" fill="none" stroke="currentColor" stroke-width="6"/><path d="M16.5 15.5H23A8.5 8.5 0 0 1 23 32.5H16.5Z" fill="currentColor"/></svg>';
 const topo = ler('partes/topo.html').replaceAll('{{MARCA}}', marca);
 const rodape = ler('partes/rodape.html').replaceAll('{{MARCA}}', marca);
 const cab = ler('js/cabeca.js').trim();
@@ -48,21 +51,62 @@ const jsonld = JSON.stringify({
   ],
 });
 
-// [fonte, saída, rodapé próprio opcional]. vitrine-v2.html é servida pelo Worker só com VITRINE_V2=1.
+// [fonte, saída, rodapé próprio opcional, v3]. vitrine-v2.html é servida pelo Worker só com VITRINE_V2=1.
+// v3 (revisão 08/11): CSS, topo, rodapé e marca próprios, servida pelo Worker só com VITRINE_V3=1.
+// O 4º campo é a língua da v3 ('pt' ou 'en'); 'legado' reaproveita o corpo das páginas legais com a cabeça da v3.
 const PAGINAS = [
   ['index.html', 'index.html'],
   ['index-v2.html', 'vitrine-v2.html', 'partes/rodape-v2.html'],
+  ['index-v3.html', 'vitrine-v3.html', 'partes/rodape-v3.html', 'pt'],
+  ['index-v3-en.html', 'vitrine-v3-en.html', 'partes/rodape-v3-en.html', 'en'],
+  ['privacidade/index.html', 'privacidade-v3.html', 'partes/rodape-v3.html', 'pt', 'legado'],
+  ['termos/index.html', 'termos-v3.html', 'partes/rodape-v3.html', 'pt', 'legado'],
+  ['404-v3.html', '404-v3.html', 'partes/rodape-v3.html', 'pt'],
   ['privacidade/index.html', 'privacidade.html'],
   ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
-for (const [src, dst, rod] of PAGINAS) {
-  let s = ler(src)
-    .replaceAll('{{TOPO}}', topo)
-    .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', marca) : rodape)
-    .replaceAll('{{CSS}}', css)
+const cssV3 = minCss('css/v3.css');
+// JSON-LD da v3: logo novo, as 5 marcas (PartiuGringa e Grimoire sem URL) e quem faz (só o nome, sem links)
+const jsonldV3 = JSON.stringify({
+  ...JSON.parse(jsonld),
+  logo: 'https://dcsolutions.app/assets/v3/marca/icone-512.png',
+  founder: { '@type': 'Person', name: 'Daniel Cortez' },
+  brand: [
+    { '@type': 'Brand', name: 'IQNorth', url: 'https://iqnorth.com/' },
+    { '@type': 'Brand', name: 'Fytform', url: 'https://fytform.com/' },
+    { '@type': 'Brand', name: 'H2HScout', url: 'https://h2hscout.com/' },
+    { '@type': 'Brand', name: 'Grimoire' },
+    { '@type': 'Brand', name: 'PartiuGringa' },
+  ],
+});
+const PRELOAD_V3 = ['barlow-400', 'barlow-600', 'barlow-cond-700', 'barlow-cond-600']
+  .map((f) => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('\n');
+const ICONES_V3 = [
+  '<link rel="icon" href="/assets/v3/marca/favicon.ico" sizes="32x32">',
+  '<link rel="icon" href="/assets/v3/marca/favicon.svg" type="image/svg+xml">',
+  '<link rel="apple-touch-icon" href="/assets/v3/apple-touch-icon.png">',
+].join('\n');
+const cabecaLegadoV3 = (s) => {
+  const trocas = [
+    ['<meta name="theme-color" content="#0c0c0d">', '<meta name="theme-color" content="#1f2d4d">'],
+    ['<link rel="icon" href="/favicon.svg" type="image/svg+xml">', ICONES_V3],
+    ['<link rel="preload" href="/assets/fonts/sans.woff2" as="font" type="font/woff2" crossorigin>', PRELOAD_V3],
+  ];
+  for (const [a, b] of trocas) { if (!s.includes(a)) throw new Error('cabeça legada mudou: ' + a); s = s.replace(a, b); }
+  return s;
+};
+for (const [src, dst, rod, v3, legado] of PAGINAS) {
+  const m = v3 ? marcaV3 : marca;
+  const topoV3 = v3 && ler(v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
+  let s = (legado ? cabecaLegadoV3(ler(src)) : ler(src))
+    .replaceAll('{{TOPO}}', v3 ? topoV3 : topo)
+    .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', m) : rodape)
+    .replaceAll('{{PRELOAD_V3}}', PRELOAD_V3)
+    .replaceAll('{{CSS}}', v3 ? cssV3 : css)
     .replaceAll('{{CABECA_JS}}', cab)
     .replaceAll('{{CORPO_JS}}', corpo)
+    .replaceAll('{{JSONLD_V3}}', jsonldV3)
     .replaceAll('{{JSONLD}}', jsonld);
   if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + src);
   if (/ style="/.test(s)) throw new Error('style inline em ' + src + ' (a CSP bloqueia)');
@@ -84,6 +128,8 @@ for (const [, f] of PAGINAS) {
 fs.cpSync(path.join(S, 'assets'), path.join(D, 'assets'), { recursive: true });
 fs.rmSync(path.join(D, 'assets/marca.svg'));
 fs.copyFileSync(path.join(S, 'assets/marca.svg'), path.join(D, 'favicon.svg'));
+// /favicon.ico (pedido automático dos navegadores): o ícone da v3
+fs.copyFileSync(path.join(S, 'assets/v3/marca/favicon.ico'), path.join(D, 'favicon.ico'));
 const G = path.join(R, 'gerado');
 if (fs.existsSync(path.join(G, 'apple-touch-icon.png'))) fs.copyFileSync(path.join(G, 'apple-touch-icon.png'), path.join(D, 'apple-touch-icon.png'));
 if (fs.existsSync(path.join(G, 'og.jpg'))) fs.copyFileSync(path.join(G, 'og.jpg'), path.join(D, 'assets/og.jpg'));
@@ -91,7 +137,7 @@ fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: 
 fs.writeFileSync(
   path.join(D, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-    ['', 'privacidade', 'termos'].map((u) => `<url><loc>https://dcsolutions.app/${u}</loc></url>`).join('') +
+    ['', 'en', 'privacidade', 'termos'].map((u) => `<url><loc>https://dcsolutions.app/${u}</loc></url>`).join('') +
     '</urlset>\n',
 );
 
