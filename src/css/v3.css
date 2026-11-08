@@ -1,9 +1,19 @@
 /* DC Solutions, vitrine v3 (revisão 08/11). Inline no build; só a vitrine-v3 usa. */
-@font-face{font-family:"Barlow";src:url(/assets/fonts/barlow-400.woff2) format("woff2");font-weight:400;font-display:optional}
-@font-face{font-family:"Barlow";src:url(/assets/fonts/barlow-600.woff2) format("woff2");font-weight:600;font-display:optional}
-@font-face{font-family:"Barlow Condensed";src:url(/assets/fonts/barlow-cond-600.woff2) format("woff2");font-weight:600;font-display:optional}
-@font-face{font-family:"Barlow Condensed";src:url(/assets/fonts/barlow-cond-700.woff2) format("woff2");font-weight:700;font-display:optional}
+@font-face{font-family:"Barlow";src:url(/assets/fonts/barlow-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Barlow";src:url(/assets/fonts/barlow-600.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Barlow Condensed";src:url(/assets/fonts/barlow-cond-600.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Barlow Condensed";src:url(/assets/fonts/barlow-cond-700.woff2) format("woff2");font-weight:700;font-display:swap}
 
+/* reservas com métricas da Barlow (largura média, ascendente e descendente medidas em 08/11 com o texto da página):
+   enquanto a Barlow carrega, o texto ocupa o mesmo espaço e a troca não desloca o layout (CLS 0) */
+@font-face{font-family:"Barlow Reserva Arial";src:local("Arial"),local("ArialMT");font-weight:400;size-adjust:95.23%;ascent-override:105.01%;descent-override:21%;line-gap-override:0%}
+@font-face{font-family:"Barlow Reserva Roboto";src:local("Roboto"),local("Roboto-Regular");font-weight:400;size-adjust:96%;ascent-override:104.16%;descent-override:20.83%;line-gap-override:0%}
+@font-face{font-family:"Barlow Reserva Arial";src:local("Arial Bold"),local("Arial-BoldMT");font-weight:600;size-adjust:90.76%;ascent-override:110.19%;descent-override:22.04%;line-gap-override:0%}
+@font-face{font-family:"Barlow Reserva Roboto";src:local("Roboto Bold"),local("Roboto-Bold");font-weight:600;size-adjust:96.52%;ascent-override:103.61%;descent-override:20.72%;line-gap-override:0%}
+@font-face{font-family:"Barlow Condensed Reserva Arial";src:local("Arial Bold"),local("Arial-BoldMT");font-weight:600;size-adjust:73.79%;ascent-override:135.52%;descent-override:27.1%;line-gap-override:0%}
+@font-face{font-family:"Barlow Condensed Reserva Roboto";src:local("Roboto Bold"),local("Roboto-Bold");font-weight:600;size-adjust:78.47%;ascent-override:127.43%;descent-override:25.49%;line-gap-override:0%}
+@font-face{font-family:"Barlow Condensed Reserva Arial";src:local("Arial Bold"),local("Arial-BoldMT");font-weight:700;size-adjust:75.47%;ascent-override:132.51%;descent-override:26.5%;line-gap-override:0%}
+@font-face{font-family:"Barlow Condensed Reserva Roboto";src:local("Roboto Bold"),local("Roboto-Bold");font-weight:700;size-adjust:80.26%;ascent-override:124.6%;descent-override:24.92%;line-gap-override:0%}
 :root{
   --anil:#1f2d4d;
   --anil-fundo:#16203a;
@@ -16,8 +26,8 @@
   --nevoa:#b9c2d3;
   --celeste:#8fb4ff;
   --pesponto:2px dashed;
-  --cond:"Barlow Condensed","Arial Narrow",ui-sans-serif,system-ui,sans-serif;
-  --sans:"Barlow",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --cond:"Barlow Condensed","Barlow Condensed Reserva Arial","Barlow Condensed Reserva Roboto","Arial Narrow",ui-sans-serif,system-ui,sans-serif;
+  --sans:"Barlow","Barlow Reserva Arial","Barlow Reserva Roboto",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   --larg:1240px;
   --gutter:clamp(18px,4vw,40px);
   --raio:20px;
