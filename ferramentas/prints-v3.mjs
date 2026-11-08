@@ -143,8 +143,7 @@ const primeiroPreco = (p) => p.evaluate(() => {
 // Prints da v1 e da v2 (fytform-d-*, fytform-m-* etc.): agora vêm de ferramentas/prints-v2.mjs (hotfix de 08/11).
 await cel.close();
 
-// H2HScout, celular (D2, decidido pelos Leads em 08/11): tela da plataforma da landing, sem a barra de navegação do topo.
-await webp(fs.readFileSync('E:/dev/projects/h2hscout-landing/landing/img/demo-ofensiva-cel-860.webp'), 'h2hscout-cel', [300, 600], [0, 128, 860, 1112], 'image/webp');
+// H2HScout: os prints agora saem de ferramentas/h2h-sem-escudos.mjs (escudos cobertos, 08/11).
 
 // Ismeire desktop: print oficial de 08/11 (via Produtos), se existir; senão, tira do site público.
 const OFICIAL = 'C:/Users/corte/OpenBot/Shared/vitrine-revisao/ismeire/ismeirecortez-home-desktop-1440-20261108.png';
