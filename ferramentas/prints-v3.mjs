@@ -15,22 +15,24 @@ const b = await chromium.launch({ executablePath: 'C:/Program Files/BraveSoftwar
 
 // png -> webp em várias larguras, pelo canvas do próprio navegador
 const conv = await b.newPage();
-async function webp(png, nome, larguras) {
-  const src = 'data:image/png;base64,' + png.toString('base64');
+// corte opcional [x, y, w, h] no original; mime para arquivos que não são png
+async function webp(png, nome, larguras, corte = null, mime = 'image/png') {
+  const src = 'data:' + mime + ';base64,' + png.toString('base64');
   for (const w of larguras) {
-    const d = await conv.evaluate(async ([src, w]) => {
+    const d = await conv.evaluate(async ([src, w, corte]) => {
       const i = new Image(); i.src = src; await i.decode();
-      const c = document.createElement('canvas'); c.width = w; c.height = Math.round(i.height * w / i.width);
-      const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(i, 0, 0, c.width, c.height);
+      const [cx, cy, cw, ch] = corte || [0, 0, i.width, i.height];
+      const c = document.createElement('canvas'); c.width = w; c.height = Math.round(ch * w / cw);
+      const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(i, cx, cy, cw, ch, 0, 0, c.width, c.height);
       return [c.toDataURL('image/webp', 0.8), c.height];
-    }, [src, w]);
+    }, [src, w, corte]);
     fs.writeFileSync(path.join(OUT, `${nome}-${w}.webp`), Buffer.from(d[0].split(',')[1], 'base64'));
     console.log(nome, w + 'x' + d[1]);
   }
 }
 
 const cel = await b.newContext({ viewport: { width: 360, height: 780 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'pt-BR' });
-for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'https://fytform.com/'], ['ismeirecortez', 'https://ismeirecortez.com/']]) {
+for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'https://fytform.com/'], ['ismeirecortez', 'https://ismeirecortez.com/'], ['iqnorth-en', 'https://iqnorth.com/en/']]) {
   const p = await cel.newPage();
   await p.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
   await p.waitForTimeout(2500);
@@ -39,7 +41,7 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
     let topo = innerHeight;
     for (const e of document.querySelectorAll('body *')) {
       const proprio = [...e.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' ');
-      if (!/R\$|PIX|grátis|gratuito/i.test(proprio)) continue;
+      if (!/R\$|PIX|grátis|gratuito|\bfree\b/i.test(proprio)) continue;
       const r = e.getBoundingClientRect();
       if (r.width && r.bottom > 0 && r.top < topo) topo = r.top;
     }
@@ -98,6 +100,9 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
   await dk.close();
 }
 await cel.close();
+
+// H2HScout, celular (D2, decidido pelos Leads em 08/11): tela da plataforma da landing, sem a barra de navegação do topo.
+await webp(fs.readFileSync('E:/dev/projects/h2hscout-landing/landing/img/demo-ofensiva-cel-860.webp'), 'h2hscout-cel', [300, 600], [0, 128, 860, 1112], 'image/webp');
 
 // Ismeire desktop: print oficial de 08/11 (via Produtos), se existir; senão, tira do site público.
 const OFICIAL = 'C:/Users/corte/OpenBot/Shared/vitrine-revisao/ismeire/ismeirecortez-home-desktop-1440-20261108.png';

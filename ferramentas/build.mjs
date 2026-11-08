@@ -52,21 +52,39 @@ const jsonld = JSON.stringify({
 });
 
 // [fonte, saída, rodapé próprio opcional, v3]. vitrine-v2.html é servida pelo Worker só com VITRINE_V2=1.
-// vitrine-v3.html (revisão 08/11) é só preview: CSS, topo e marca próprios; o Worker ainda não a liga.
+// v3 (revisão 08/11): CSS, topo, rodapé e marca próprios, servida pelo Worker só com VITRINE_V3=1.
+// O 4º campo é a língua da v3 ('pt' ou 'en'); 'legado' reaproveita o corpo das páginas legais com a cabeça da v3.
 const PAGINAS = [
   ['index.html', 'index.html'],
   ['index-v2.html', 'vitrine-v2.html', 'partes/rodape-v2.html'],
-  ['index-v3.html', 'vitrine-v3.html', 'partes/rodape-v3.html', true],
+  ['index-v3.html', 'vitrine-v3.html', 'partes/rodape-v3.html', 'pt'],
+  ['index-v3-en.html', 'vitrine-v3-en.html', 'partes/rodape-v3-en.html', 'en'],
+  ['privacidade/index.html', 'privacidade-v3.html', 'partes/rodape-v3.html', 'pt', 'legado'],
+  ['termos/index.html', 'termos-v3.html', 'partes/rodape-v3.html', 'pt', 'legado'],
+  ['404-v3.html', '404-v3.html', 'partes/rodape-v3.html', 'pt'],
   ['privacidade/index.html', 'privacidade.html'],
   ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
 const cssV3 = minCss('css/v3.css');
-for (const [src, dst, rod, v3] of PAGINAS) {
+const PRELOAD_V3 = ['barlow-400', 'barlow-600', 'barlow-cond-700', 'barlow-cond-600']
+  .map((f) => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('\n');
+const cabecaLegadoV3 = (s) => {
+  const trocas = [
+    ['<meta name="theme-color" content="#0c0c0d">', '<meta name="theme-color" content="#1f2d4d">'],
+    ['<link rel="icon" href="/favicon.svg" type="image/svg+xml">', '<link rel="icon" href="/assets/v3/marca/favicon.svg" type="image/svg+xml">'],
+    ['<link rel="preload" href="/assets/fonts/sans.woff2" as="font" type="font/woff2" crossorigin>', PRELOAD_V3],
+  ];
+  for (const [a, b] of trocas) { if (!s.includes(a)) throw new Error('cabeça legada mudou: ' + a); s = s.replace(a, b); }
+  return s;
+};
+for (const [src, dst, rod, v3, legado] of PAGINAS) {
   const m = v3 ? marcaV3 : marca;
-  let s = ler(src)
-    .replaceAll('{{TOPO}}', v3 ? ler('partes/topo-v3.html').replaceAll('{{MARCA}}', m) : topo)
+  const topoV3 = v3 && ler(v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
+  let s = (legado ? cabecaLegadoV3(ler(src)) : ler(src))
+    .replaceAll('{{TOPO}}', v3 ? topoV3 : topo)
     .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', m) : rodape)
+    .replaceAll('{{PRELOAD_V3}}', PRELOAD_V3)
     .replaceAll('{{CSS}}', v3 ? cssV3 : css)
     .replaceAll('{{CABECA_JS}}', cab)
     .replaceAll('{{CORPO_JS}}', corpo)

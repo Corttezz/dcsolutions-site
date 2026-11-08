@@ -44,6 +44,10 @@ const p = await b.newPage({ viewport: { width: 1200, height: 630 } });
 await p.setContent(og);
 await p.waitForTimeout(500);
 await p.screenshot({ path: path.join(OUT, 'og.jpg'), type: 'jpeg', quality: 86 });
+// versão em inglês: só o título muda
+await p.setContent(og.replace('Produtos pequenos, feitos para resolver uma coisa.', 'Small products, made to solve one thing.'));
+await p.waitForTimeout(500);
+await p.screenshot({ path: path.join(OUT, 'og-en.jpg'), type: 'jpeg', quality: 86 });
 await p.setViewportSize({ width: 180, height: 180 });
 await p.setContent(icone);
 await p.screenshot({ path: path.join(OUT, 'apple-touch-icon.png') });
