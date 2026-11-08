@@ -33,7 +33,7 @@ async function webp(arquivo, nome, larguras, corte, q = 0.82) {
   }
 }
 // capa: céu, montanhas, castelo e a bifurcação, sem a moldura de CRT nem a barra do topo
-await webp(SHOTS + '06_crossroads.png', 'capa', [800, 1600], [60, 140, 1800, 600]);
+await webp(SHOTS + '06_crossroads.png', 'capa', [800, 1600], [110, 150, 1700, 567]);
 for (const f of ['01_combat_hand', '02_boss_tyrant', '03_frost_combo', '04_shop']) await webp(SHOTS + f + '.png', f, [480, 960]);
 await webp(MARCA + 'icon.png', 'icone', [112]);
 fs.copyFileSync(MARCA + 'wordmark.png', path.join(OUT, 'wordmark.png'));

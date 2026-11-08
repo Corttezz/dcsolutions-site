@@ -9,14 +9,14 @@ const require = createRequire('E:/dev/projects/Tiktok-accounts/package.json');
 const { chromium } = require('playwright-core');
 
 const R = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT = path.join(R, 'src/assets/v3/prints');
-fs.mkdirSync(OUT, { recursive: true });
+const PASTA = path.join(R, 'src/assets/v3/prints');
+fs.mkdirSync(PASTA, { recursive: true });
 const b = await chromium.launch({ executablePath: 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe', headless: true });
 
 // png -> webp em várias larguras, pelo canvas do próprio navegador
 const conv = await b.newPage();
 // corte opcional [x, y, w, h] no original; mime para arquivos que não são png
-async function webp(png, nome, larguras, corte = null, mime = 'image/png') {
+async function webp(png, nome, larguras, corte = null, mime = 'image/png', OUT = PASTA) {
   const src = 'data:' + mime + ';base64,' + png.toString('base64');
   for (const w of larguras) {
     const d = await conv.evaluate(async ([src, w, corte]) => {
@@ -99,7 +99,78 @@ for (const [nome, url] of [['iqnorth', 'https://iqnorth.com/'], ['fytform', 'htt
   await webp(await p.locator('[data-v3]').screenshot(), 'iqnorth-relatorio', [300, 600]);
   await dk.close();
 }
+
+// Fytform (material do Fytform Lead, 08/11). Não pode: preço, PIX, premium, números de vendas ou planos, nota, App Store/Play/APK.
+const PROIBIDO_FYT = /R\$|PIX|premium|grátis|gratuito|\d[\d.]*\+|\b4,9\b|\b9\d\s?%|satisfa|avalia[cç][aã]o|Play|App Store|APK|substitui (o )?(personal|nutricionista|médico)|garantia|vital[ií]ci/i;
+// lista os textos proibidos visíveis num retângulo da página (coordenadas da janela)
+const proibidosNaTela = (p, y0 = 0, y1 = 1e9) => p.evaluate(([src, y0, y1]) => {
+  const re = new RegExp(src, 'i');
+  return [...document.querySelectorAll('body *')].filter((e) => {
+    const t = [...e.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' ');
+    const r = e.getBoundingClientRect();
+    return re.test(t) && r.width && r.bottom > y0 && r.top < Math.min(innerHeight, y1) && e.checkVisibility();
+  }).map((e) => e.textContent.trim().slice(0, 60));
+}, [PROIBIDO_FYT.source, y0, y1]);
+// topo da primeira linha visível com preço (texto próprio do elemento), abaixo da barra do topo
+const primeiroPreco = (p) => p.evaluate(() => {
+  let topo = Infinity;
+  for (const e of document.querySelectorAll('body *')) {
+    const t = [...e.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' ');
+    const r = e.getBoundingClientRect();
+    if (/R\$/.test(t) && e.checkVisibility() && r.width && r.top > 40 && r.top < topo) topo = r.top;
+  }
+  return topo;
+});
+{
+  // seção "Veja o plano por dentro antes de pagar": as telas do app com o plano de exemplo
+  const p = await cel.newPage();
+  await p.goto('https://fytform.com/', { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(1500);
+  await p.getByText(/Estas são as telas do app com um plano de exemplo/).first().evaluate((e) => {
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo(0, e.getBoundingClientRect().bottom + window.scrollY + 8);
+  });
+  await p.waitForTimeout(2000);
+  const vistos = await proibidosNaTela(p);
+  if (vistos.length) throw new Error('plano de exemplo do Fytform com termo proibido: ' + vistos.join(' | '));
+  // só o aparelho do carrossel; tira a legenda e os pontos de navegação abaixo dele
+  const legenda = await p.getByText(/O plano abre no celular/).first().evaluate((e) => e.getBoundingClientRect().top);
+  const fundo = Math.floor(legenda - 44); // os pontos do carrossel ficam logo acima da legenda
+  if (fundo < 400 || fundo > 780) throw new Error('fytform plano: corte fora do esperado (' + fundo + ')');
+  await webp(await p.screenshot({ clip: { x: 0, y: 0, width: 360, height: fundo } }), 'fytform-plano', [300, 600]);
+  await p.close();
+}
+{
+  // v1 e v2 (arco do hero e card): celular 1:2, cortado acima da linha de preço
+  const p = await cel.newPage();
+  await p.goto('https://fytform.com/', { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(2500);
+  const topo = await primeiroPreco(p);
+  const h = Math.floor(topo - 12), w = Math.floor(h / 2);
+  if (w > 360 || h < 560) throw new Error('fytform v1/v2 celular: corte fora do esperado');
+  const vistos = await proibidosNaTela(p, 0, h);
+  if (vistos.length) throw new Error('fytform v1/v2 celular com termo proibido: ' + vistos.join(' | '));
+  const RAIZ = path.join(R, 'src/assets/prints');
+  const png = await p.screenshot({ clip: { x: 0, y: 0, width: w, height: h } });
+  await webp(png, 'fytform-m', [240, 480], null, 'image/png', RAIZ);
+  await p.close();
+}
 await cel.close();
+{
+  // v1 e v2 (janela do card): desktop 16:10, cortado acima da linha de preço
+  const dk = await b.newContext({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 2, locale: 'pt-BR' });
+  const p = await dk.newPage();
+  await p.goto('https://fytform.com/', { waitUntil: 'networkidle', timeout: 60000 });
+  await p.waitForTimeout(2500);
+  const topo = await primeiroPreco(p);
+  const h = Math.floor(topo - 12), w = Math.round(h * 1.6);
+  if (w > 1280 || h < 500) throw new Error('fytform v1/v2 desktop: corte fora do esperado');
+  const vistos = await proibidosNaTela(p, 0, h);
+  if (vistos.length) throw new Error('fytform v1/v2 desktop com termo proibido: ' + vistos.join(' | '));
+  const RAIZ = path.join(R, 'src/assets/prints');
+  await webp(await p.screenshot({ clip: { x: 0, y: 0, width: w, height: h } }), 'fytform-d', [640, 1120], null, 'image/png', RAIZ);
+  await dk.close();
+}
 
 // H2HScout, celular (D2, decidido pelos Leads em 08/11): tela da plataforma da landing, sem a barra de navegação do topo.
 await webp(fs.readFileSync('E:/dev/projects/h2hscout-landing/landing/img/demo-ofensiva-cel-860.webp'), 'h2hscout-cel', [300, 600], [0, 128, 860, 1112], 'image/webp');
