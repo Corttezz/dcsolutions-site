@@ -62,11 +62,17 @@ const PAGINAS = [
   ['privacidade/index.html', 'privacidade-v3.html', 'partes/rodape-v3.html', 'pt', 'legado'],
   ['termos/index.html', 'termos-v3.html', 'partes/rodape-v3.html', 'pt', 'legado'],
   ['404-v3.html', '404-v3.html', 'partes/rodape-v3.html', 'pt'],
+  // v4 (08/11): só inglês, servida pelo Worker só com VITRINE_V4=1 (tem prioridade sobre a v3)
+  ['index-v4.html', 'vitrine-v4.html', 'partes/rodape-v4.html', 'v4'],
+  ['privacy-v4.html', 'privacy-v4.html', 'partes/rodape-v4.html', 'v4'],
+  ['terms-v4.html', 'terms-v4.html', 'partes/rodape-v4.html', 'v4'],
+  ['404-v4.html', '404-v4.html', 'partes/rodape-v4.html', 'v4'],
   ['privacidade/index.html', 'privacidade.html'],
   ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
 const cssV3 = minCss('css/v3.css');
+const cssV4 = cssV3 + minCss('css/v4.css');
 // JSON-LD da v3: logo novo, as 5 marcas (PartiuGringa e Grimoire sem URL) e quem faz (só o nome, sem links)
 const jsonldV3 = JSON.stringify({
   ...JSON.parse(jsonld),
@@ -79,6 +85,13 @@ const jsonldV3 = JSON.stringify({
     { '@type': 'Brand', name: 'Grimoire' },
     { '@type': 'Brand', name: 'PartiuGringa' },
   ],
+});
+// JSON-LD da v4: sem a cidade (o endereço completo fica só na linha legal do rodapé) e IQNorth em inglês
+const jsonldV4 = JSON.stringify({
+  ...JSON.parse(jsonldV3),
+  url: 'https://dcsolutions.app/',
+  address: { '@type': 'PostalAddress', addressCountry: 'BR' },
+  brand: JSON.parse(jsonldV3).brand.map((m) => (m.name === 'IQNorth' ? { ...m, url: 'https://iqnorth.com/en/' } : m)),
 });
 const PRELOAD_V3 = ['barlow-400', 'barlow-600', 'barlow-cond-700', 'barlow-cond-600']
   .map((f) => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('\n');
@@ -98,15 +111,17 @@ const cabecaLegadoV3 = (s) => {
 };
 for (const [src, dst, rod, v3, legado] of PAGINAS) {
   const m = v3 ? marcaV3 : marca;
-  const topoV3 = v3 && ler(v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
+  const topoV3 = v3 && ler(v3 === 'v4' ? 'partes/topo-v4.html' : v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
   let s = (legado ? cabecaLegadoV3(ler(src)) : ler(src))
     .replaceAll('{{TOPO}}', v3 ? topoV3 : topo)
     .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', m) : rodape)
     .replaceAll('{{PRELOAD_V3}}', PRELOAD_V3)
-    .replaceAll('{{CSS}}', v3 ? cssV3 : css)
+    .replaceAll('{{ICONES_V3}}', ICONES_V3)
+    .replaceAll('{{CSS}}', v3 === 'v4' ? cssV4 : v3 ? cssV3 : css)
     .replaceAll('{{CABECA_JS}}', cab)
     .replaceAll('{{CORPO_JS}}', corpo)
     .replaceAll('{{JSONLD_V3}}', jsonldV3)
+    .replaceAll('{{JSONLD_V4}}', jsonldV4)
     .replaceAll('{{JSONLD}}', jsonld);
   if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + src);
   if (/ style="/.test(s)) throw new Error('style inline em ' + src + ' (a CSP bloqueia)');
@@ -134,12 +149,14 @@ const G = path.join(R, 'gerado');
 if (fs.existsSync(path.join(G, 'apple-touch-icon.png'))) fs.copyFileSync(path.join(G, 'apple-touch-icon.png'), path.join(D, 'apple-touch-icon.png'));
 if (fs.existsSync(path.join(G, 'og.jpg'))) fs.copyFileSync(path.join(G, 'og.jpg'), path.join(D, 'assets/og.jpg'));
 fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: https://dcsolutions.app/sitemap.xml\n');
-fs.writeFileSync(
-  path.join(D, 'sitemap.xml'),
-  '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-    ['', 'en', 'privacidade', 'termos'].map((u) => `<url><loc>https://dcsolutions.app/${u}</loc></url>`).join('') +
-    '</urlset>\n',
-);
+// sitemap.xml é o da v4; o Worker serve sitemap-v3.xml no lugar dele com VITRINE_V4 desligada
+const sitemap = (us) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+  us.map((u) => `<url><loc>https://dcsolutions.app/${u}</loc></url>`).join('') + '</urlset>\n';
+fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms']));
+fs.writeFileSync(path.join(D, 'sitemap-v3.xml'), sitemap(['', 'en', 'privacidade', 'termos']));
+// OG da v4: a imagem em inglês da v3 (sem cidade), num endereço novo por causa do cache de 30 dias
+fs.mkdirSync(path.join(D, 'assets/v4'), { recursive: true });
+fs.copyFileSync(path.join(S, 'assets/v3/og-en.jpg'), path.join(D, 'assets/v4/og.jpg'));
 
 const csp = [
   "default-src 'none'",
