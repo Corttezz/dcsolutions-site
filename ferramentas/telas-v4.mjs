@@ -216,14 +216,23 @@ if (quer('ismeire-servicos') || quer('ismeire-consulta')) {
 }
 
 // PartiuGringa (09/11): a landing pública no celular, só em português (regra do Fytform: o card diz "Portuguese only").
-// Sem o cabeçalho flutuante, que tem o botão "Começar grátis". Telas: o score de 0 a 100 e o "Como funciona".
-// Trocar quando a melhoria de textos e visual do PartiuGringa for publicada.
-if (quer('partiugringa-score') || quer('partiugringa-passos')) {
+// Sem o cabeçalho flutuante, que tem o botão "Começar grátis". Telas: a nota de 0 a 100 e o "Como funciona".
+// Capturadas da landing com o visual antigo e ajustes pontuais (Pages 367a02dc, merge 119bc54), nunca da R1 (00d4a84).
+// Nomes novos de arquivo (cache de 30 dias). Abaixo da nota, o bloco "Vagas que combinam" (com salário em US$) fica oculto.
+if (quer('partiugringa-nota') || quer('partiugringa-etapas')) {
   const cel = await b.newContext({ viewport: { width: 390, height: 794 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'pt-BR' });
   const p = await cel.newPage();
   await p.goto('https://partiugringa.com/', { waitUntil: 'networkidle', timeout: 60000 }); await p.waitForTimeout(2500);
   await p.addStyleTag({ content: 'html{scroll-behavior:auto!important} header{display:none!important}' });
-  for (const [nome, alvo, folga] of [['partiugringa-score', /Saiba seu score em segundos/, 40], ['partiugringa-passos', /Da inscrição à oferta/, 70]]) {
+  // esconde o menor bloco que contém "Vagas que combinam" sem conter a nota
+  await p.evaluate(() => {
+    const hs = [...document.querySelectorAll('h3')];
+    const nota = hs.find((h) => /Sua nota, critério por critério/.test(h.textContent));
+    let x = hs.find((h) => /Vagas que combinam/.test(h.textContent));
+    while (x.parentElement && !x.parentElement.contains(nota)) x = x.parentElement;
+    x.style.visibility = 'hidden';
+  });
+  for (const [nome, alvo, folga] of [['partiugringa-nota', /Sua nota, critério por critério/, 40], ['partiugringa-etapas', /Da análise à candidatura/, 70]]) {
     if (!quer(nome)) continue;
     await p.getByText(alvo).first().evaluate((e, f) => window.scrollTo(0, e.getBoundingClientRect().top + window.scrollY - f), folga);
     await p.waitForTimeout(5000);
