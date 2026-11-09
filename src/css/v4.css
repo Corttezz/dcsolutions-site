@@ -2,7 +2,7 @@
 
 /* cards com as duas colunas iguais, para o palco ter espaço para o aparelho grande */
 @media (min-width:901px){.prod{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
-.palco{container-type:inline-size;overflow:hidden;padding:clamp(28px,3vw,44px) clamp(16px,2vw,28px)}
+.palco{container-type:inline-size;overflow:hidden}
 
 /* Aparelho na receita dos celulares do iqnorth.com e do fytform.com: escala real 418x872 (aro de titânio 4, bisel 10,
    tela 390x844), medida em unidades --u = largura/418. Botões laterais, reflexo do vidro, brilho no metal e sombra de contato.
@@ -10,7 +10,7 @@
 .cel{--w:300px;--u:calc(var(--w) / 418);position:relative;flex:none;width:var(--w)}
 .cel-dev{position:relative;border-radius:calc(66 * var(--u));padding:calc(4 * var(--u));
   background:linear-gradient(135deg,#5b5f70 0%,#2a2d3a 18%,#15161f 40%,#3b3e4d 62%,#1a1b24 80%,#4a4d5c 100%);
-  box-shadow:0 0 0 1px rgba(0,0,0,.9),0 calc(60 * var(--u)) calc(90 * var(--u)) calc(-30 * var(--u)) rgba(0,0,0,.85),0 calc(18 * var(--u)) calc(36 * var(--u)) rgba(0,0,0,.45),0 0 calc(90 * var(--u)) calc(-18 * var(--u)) var(--brilho,transparent)}
+  box-shadow:0 0 0 1px rgba(0,0,0,.9),0 calc(60 * var(--u)) calc(90 * var(--u)) calc(-30 * var(--u)) rgba(0,0,0,.85),0 calc(18 * var(--u)) calc(36 * var(--u)) rgba(0,0,0,.45)}
 .cel-dev::before{content:"";position:absolute;inset:0;z-index:4;border-radius:inherit;padding:calc(4 * var(--u));pointer-events:none;mix-blend-mode:screen;
   background:radial-gradient(60% 30% at 30% 14%,rgba(255,255,255,.3),transparent 70%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
@@ -28,20 +28,30 @@
 .cel-chao{position:absolute;z-index:-1;left:-18%;right:-18%;bottom:-4%;height:10%;border-radius:50%;pointer-events:none;
   background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);filter:blur(8px)}
 
-/* dois aparelhos: o da frente reto e grande; o de trás menor, mais alto, à esquerda e levemente inclinado, atrás do da frente */
-.dupla{display:flex;justify-content:center;align-items:flex-start;width:100%;isolation:isolate}
-.dupla .tras{--w:min(230px,40cqi);z-index:0;transform:rotate(-4deg);transform-origin:50% 100%}
+/* dois aparelhos (skill stageshow, 08/11): num palco colorido o aparelho fica recuado dos lados e sai pela borda de baixo,
+   emoldurado em três lados, em vez de flutuar inteiro com ar dos quatro lados. O da frente, reto e maior, passa 22% da
+   altura dele para fora; o de trás, menor, mais alto e inclinado, fica atrás. O palco não cresce com os aparelhos (contain:size). */
+.prod .palco{position:relative;contain:size;place-items:start center;padding:0}
+.dupla{--wt:min(230px,40cqi);--wf:min(320px,58cqi);position:absolute;left:0;right:0;bottom:calc(var(--wf) * -.46);display:flex;justify-content:center;align-items:flex-start;isolation:isolate}
+.dupla .tras{--w:var(--wt);z-index:0;transform:rotate(-4deg);transform-origin:50% 100%}
 .dupla .tras .cel-tela{filter:brightness(.9)}
-.dupla .frente{--w:min(300px,54cqi);z-index:1;margin-left:calc(var(--w) * -.24);margin-top:calc(var(--w) * .26)}
-@media (max-width:600px){
-  .palco{margin-inline:-10px;padding:22px 8px 30px}
-  .dupla .tras{--w:min(190px,56cqi)}
-  .dupla .frente{--w:min(270px,80cqi);margin-left:calc(100cqi - min(190px,56cqi) - var(--w));margin-top:calc(var(--w) * .2)}
+.dupla .frente{--w:var(--wf);z-index:1;margin-left:calc(var(--wf) * -.24);margin-top:calc(var(--wf) * .26)}
+@media (min-width:901px){.prod .palco{min-height:640px}}
+
+/* celular e tablet (crítica da impeccable): o nome do produto vem antes das telas, depois o texto */
+@media (max-width:900px){
+  .prod{display:flex;flex-direction:column;gap:0}
+  .prod .prod-txt{display:contents}
+  .prod .prod-txt>*{align-self:flex-start}
+  .prod .prod-cab{order:-2}
+  .prod .palco{order:-1;align-self:stretch;margin-top:24px;aspect-ratio:1/1;max-height:680px}
 }
-.p-iq{--brilho:rgba(143,139,255,.45)}
-.p-fyt{--brilho:rgba(132,204,22,.38)}
-.p-h2h{--brilho:rgba(246,183,60,.3)}
-.p-ic{--brilho:rgba(111,191,168,.35)}
+@media (max-width:600px){
+  .prod .palco{margin-inline:-10px;aspect-ratio:5/7}
+  /* o da frente fica grande e legível, recuado 6% da direita; o de trás sai de propósito pela esquerda (cerca de um terço) */
+  .dupla{--wt:min(170px,50cqi);--wf:min(260px,74cqi);bottom:calc(var(--wf) * -.52);justify-content:flex-end;padding-right:6cqi}
+  .dupla .frente{margin-left:calc(var(--wf) * -.2);margin-top:calc(var(--wf) * .2)}
+}
 
 /* Ismeire: card cheio, no tom do site dela */
 .p-ic{--bg:#f6f3ec;--fg:#0f3a31;--fg2:#3e5a53;--tom:#0f5e4e;--sobre-tom:#fff;--palco:linear-gradient(160deg,#1d6f5d,#0f3a31);border:1.5px solid var(--linha)}
@@ -52,7 +62,7 @@
 .pcs{position:relative;align-self:center;width:100%;container-type:inline-size;isolation:isolate}
 .pc-monitor{position:relative;z-index:1;width:80cqi;margin:15cqi 0 0 auto}
 .pc-monitor-moldura{position:relative;padding:1.6cqi 1.6cqi 3.6cqi;border-radius:1.8cqi;background:linear-gradient(160deg,#2c2d33,#121317 60%,#1b1c21);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09),0 3cqi 5cqi -1.5cqi rgba(0,0,0,.8),0 0 6cqi -1cqi rgba(217,164,65,.25)}
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09),0 3cqi 5cqi -1.5cqi rgba(0,0,0,.8)}
 .pc-monitor-moldura::after{content:"";position:absolute;left:50%;bottom:1.3cqi;width:1cqi;height:1cqi;margin-left:-.5cqi;border-radius:50%;background:#3a3b40}
 .pc-pe{width:14cqi;height:7cqi;margin:0 auto;background:linear-gradient(90deg,#26272c,#4a4c52 50%,#26272c);clip-path:polygon(32% 0,68% 0,80% 100%,20% 100%)}
 .pc-base{width:30cqi;height:1.6cqi;margin:0 auto;border-radius:1cqi 1cqi .5cqi .5cqi;background:linear-gradient(#5a5c62,#2b2c31);box-shadow:0 1.5cqi 2.5cqi -1cqi rgba(0,0,0,.7)}
@@ -65,3 +75,30 @@
 .pc-note img{filter:brightness(.88)}
 
 .extra.um{grid-template-columns:1fr}
+
+/* ---------- revisão com as skills (08/11) ---------- */
+/* títulos dos princípios sem palavra sozinha na última linha (detector) */
+.grade-p h3{text-wrap:balance}
+/* listas e e-mail: sem palavra sozinha na última linha (detector) e sem vazar com um endereço longo (break-ui) */
+.fatos li{text-wrap:pretty}
+.email{overflow-wrap:anywhere}
+/* link do domínio com área de toque de 44 px (audit) sem mudar o desenho */
+.prod-cab .dom{padding:10px 0;margin:-6px 0 -10px;border-bottom:0}
+.prod-cab .dom:hover{text-decoration:underline;text-underline-offset:3px}
+/* sem imagem, a tela fica escura em vez de mostrar o texto alternativo (o leitor de tela continua lendo) */
+.cel-tela{color:transparent}
+/* superfícies do navegador na paleta (impeccable) */
+::selection{background:var(--anil);color:var(--algodao)}
+.topo ::selection,.hero ::selection,.contato ::selection,.rodape ::selection{background:var(--algodao);color:var(--anil)}
+/* botão: resposta ao toque firme e curta (Emil: 160 ms, ease-out forte, scale .97) */
+.btn{transition:background-color .2s,color .2s,border-color .2s,transform .16s cubic-bezier(.23,1,.32,1)}
+.btn:active{transform:scale(.97)}
+/* etiquetas: o hover que mexe fica só para mouse (Emil); no toque elas não pulam */
+.tag:hover{transform:rotate(var(--r))}
+@media (hover:hover) and (pointer:fine){.tag:hover{transform:rotate(0deg) translateY(-3px)}}
+/* perguntas: a resposta abre com altura e opacidade, curto (Emil), só com movimento permitido e onde o navegador suporta */
+@media (prefers-reduced-motion:no-preference){
+  :root{interpolate-size:allow-keywords}
+  .faq details::details-content{block-size:0;overflow-y:clip;opacity:0;transition:block-size .24s cubic-bezier(.23,1,.32,1),opacity .2s ease,content-visibility .24s allow-discrete}
+  .faq details[open]::details-content{block-size:auto;opacity:1}
+}
