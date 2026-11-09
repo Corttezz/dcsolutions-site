@@ -26,16 +26,36 @@ export default {
     const v3 = env.VITRINE_V3 === '1';
     const V3 = { '/': '/vitrine-v3', '/en': '/vitrine-v3-en', '/en/': '/vitrine-v3-en', '/privacidade': '/privacidade-v3', '/termos': '/termos-v3' };
     const paginaV3 = /^\/(vitrine-v3(-en)?|privacidade-v3|termos-v3|404-v3)(\.html)?$/.test(p);
+    // Vitrine v4 (08/11, só inglês) atrás da flag VITRINE_V4 ('1' liga; tem prioridade sobre a v3).
+    // Ligada: / , /privacy, /terms e a 404 vêm da v4; /en, /privacidade e /termos dão 301; as páginas antigas em português dão 404.
+    // Desligada ('0' = rollback para a v3): tudo como antes, as páginas *-v4 dão 404 e o sitemap volta ao da v3.
+    const v4 = env.VITRINE_V4 === '1';
+    const V4 = { '/': '/vitrine-v4', '/privacy': '/privacy-v4', '/privacy/': '/privacy-v4', '/terms': '/terms-v4', '/terms/': '/terms-v4' };
+    const R301 = { '/en': '/', '/en/': '/', '/privacidade': '/privacy', '/privacidade/': '/privacy', '/privacidade.html': '/privacy', '/termos': '/terms', '/termos/': '/terms', '/termos.html': '/terms' };
+    const paginaV4 = /^\/(vitrine-v4|privacy-v4|terms-v4|404-v4)(\.html)?$/.test(p);
+    const antigaPt = /^\/(vitrine-v2|vitrine-v3(-en)?|privacidade-v3|termos-v3|404-v3|404|sitemap-v3)(\.(html|xml))?$/.test(p);
+    if (v4 && R301[p]) {
+      const res = new Response(null, { status: 301, headers: { Location: new URL(R301[p] + url.search, url).toString(), 'Cache-Control': 'public, max-age=3600' } });
+      for (const [k, v] of Object.entries(SEG)) res.headers.set(k, v);
+      return res;
+    }
     let alvo = req;
     let status;
-    if (v3 && V3[p]) alvo = new Request(new URL(V3[p], url), req);
+    if (v4 && V4[p]) alvo = new Request(new URL(V4[p], url), req);
+    else if (v4 && antigaPt) status = 404;
+    else if (paginaV4 && !v4) { alvo = new Request(new URL('/404', url), req); status = 404; }
+    else if (p === '/sitemap.xml' && !v4) alvo = new Request(new URL('/sitemap-v3.xml', url), req);
+    else if (v3 && V3[p]) alvo = new Request(new URL(V3[p], url), req);
     else if (p === '/' && ligada) alvo = new Request(new URL('/vitrine-v2', url), req);
     else if (((p === '/vitrine-v2' || p === '/vitrine-v2.html') && !ligada) || (paginaV3 && !v3)) {
       alvo = new Request(new URL('/404', url), req);
       status = 404;
     }
-    let r = await env.ASSETS.fetch(alvo);
-    if (v3 && (r.status === 404 || status === 404)) {
+    let r = status === 404 && v4 ? null : await env.ASSETS.fetch(alvo);
+    if (v4 && (status === 404 || r.status === 404)) {
+      r = await env.ASSETS.fetch(new Request(new URL('/404-v4', url), req));
+      status = 404;
+    } else if (v3 && (r.status === 404 || status === 404)) {
       r = await env.ASSETS.fetch(new Request(new URL('/404-v3', url), req));
       status = 404;
     }

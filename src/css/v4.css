@@ -1,0 +1,22 @@
+/* v4 (08/11): soma ao v3.css. Todos os produtos com dois aparelhos sobrepostos; Grimoire em duas janelas de PC. */
+.par{display:flex;align-items:flex-start;justify-content:center;width:100%;padding:8px 0 40px}
+.par .fone{width:min(220px,50%);flex:none}
+.par .fone:first-child{transform:rotate(-3deg)}
+.par .fone+.fone{position:relative;z-index:1;margin-left:-12%;margin-top:clamp(40px,6vw,72px);transform:rotate(3deg);box-shadow:-16px 30px 50px -18px rgba(0,0,0,.75)}
+@media (max-width:900px){.par .fone{width:min(190px,50%)}}
+
+/* Ismeire: card cheio, no tom do site dela */
+.p-ic{--bg:#f6f3ec;--fg:#0f3a31;--fg2:#3e5a53;--tom:#0f5e4e;--sobre-tom:#fff;--palco:linear-gradient(160deg,#1d6f5d,#0f3a31);border:1.5px solid var(--linha)}
+.p-ic .prod-cab img{background:#e7efe9;padding:6px}
+.p-ic .fone{border-color:#0b2a24;background:#0b2a24}
+.p-ic .prod-desc{margin-top:20px}
+
+/* Grimoire: duas janelas de PC sobrepostas */
+.janelas{position:relative;align-self:center;padding-bottom:24%}
+.janela{border-radius:10px;overflow:hidden;background:#000;box-shadow:0 26px 44px -18px rgba(0,0,0,.8),0 0 0 1px rgba(217,164,65,.35)}
+.janela::before{content:"";display:block;height:22px;background:radial-gradient(circle at 14px 50%,#c8553d 4px,transparent 4.5px),radial-gradient(circle at 28px 50%,#d9a441 4px,transparent 4.5px),radial-gradient(circle at 42px 50%,#6f9a5b 4px,transparent 4.5px),#2a1a12}
+.janela img{display:block;width:100%;height:auto;aspect-ratio:16/9;image-rendering:pixelated}
+.janela:first-child{width:86%;transform:rotate(-1.5deg)}
+.janela+.janela{position:absolute;right:0;bottom:0;width:64%;transform:rotate(1.5deg);z-index:1}
+
+.extra.um{grid-template-columns:1fr}
