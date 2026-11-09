@@ -102,3 +102,7 @@
   .faq details::details-content{block-size:0;overflow-y:clip;opacity:0;transition:block-size .24s cubic-bezier(.23,1,.32,1),opacity .2s ease,content-visibility .24s allow-discrete}
   .faq details[open]::details-content{block-size:auto;opacity:1}
 }
+
+/* PartiuGringa no ar (09/11): card cheio como os outros produtos, nas cores do antigo "em breve" */
+.p-pg{--bg:#0f2a28;--fg:#e6fffb;--fg2:rgba(230,255,251,.76);--tom:#5eead4;--sobre-tom:#062320;--palco:linear-gradient(160deg,#145a52,#0b201e)}
+.p-pg .prod-cab img{background:#062320;padding:8px}

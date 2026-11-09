@@ -86,12 +86,12 @@ const jsonldV3 = JSON.stringify({
     { '@type': 'Brand', name: 'PartiuGringa' },
   ],
 });
-// JSON-LD da v4: sem a cidade (o endereço completo fica só na linha legal do rodapé) e IQNorth em inglês
+// JSON-LD da v4: sem a cidade (o endereço completo fica só na linha legal do rodapé), IQNorth em inglês e PartiuGringa no ar (09/11)
 const jsonldV4 = JSON.stringify({
   ...JSON.parse(jsonldV3),
   url: 'https://dcsolutions.app/',
   address: { '@type': 'PostalAddress', addressCountry: 'BR' },
-  brand: JSON.parse(jsonldV3).brand.map((m) => (m.name === 'IQNorth' ? { ...m, url: 'https://iqnorth.com/en/' } : m)),
+  brand: JSON.parse(jsonldV3).brand.map((m) => (m.name === 'IQNorth' ? { ...m, url: 'https://iqnorth.com/en/' } : m.name === 'PartiuGringa' ? { ...m, url: 'https://partiugringa.com/' } : m)),
 });
 const PRELOAD_V3 = ['barlow-400', 'barlow-600', 'barlow-cond-700', 'barlow-cond-600']
   .map((f) => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('\n');

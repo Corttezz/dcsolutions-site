@@ -214,4 +214,22 @@ if (quer('ismeire-servicos') || quer('ismeire-consulta')) {
   }
   await cel.close();
 }
+
+// PartiuGringa (09/11): a landing pública no celular, só em português (regra do Fytform: o card diz "Portuguese only").
+// Sem o cabeçalho flutuante, que tem o botão "Começar grátis". Telas: o score de 0 a 100 e o "Como funciona".
+// Trocar quando a melhoria de textos e visual do PartiuGringa for publicada.
+if (quer('partiugringa-score') || quer('partiugringa-passos')) {
+  const cel = await b.newContext({ viewport: { width: 390, height: 794 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: 'pt-BR' });
+  const p = await cel.newPage();
+  await p.goto('https://partiugringa.com/', { waitUntil: 'networkidle', timeout: 60000 }); await p.waitForTimeout(2500);
+  await p.addStyleTag({ content: 'html{scroll-behavior:auto!important} header{display:none!important}' });
+  for (const [nome, alvo, folga] of [['partiugringa-score', /Saiba seu score em segundos/, 40], ['partiugringa-passos', /Da inscrição à oferta/, 70]]) {
+    if (!quer(nome)) continue;
+    await p.getByText(alvo).first().evaluate((e, f) => window.scrollTo(0, e.getBoundingClientRect().top + window.scrollY - f), folga);
+    await p.waitForTimeout(5000);
+    await trava(p, p.locator('body'), nome);
+    await salvar(await compor(png(await p.screenshot()), { fundo: 'auto', tinta: '#111' }), nome);
+  }
+  await cel.close();
+}
 await b.close();
