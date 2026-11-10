@@ -106,3 +106,23 @@
 /* PartiuGringa no ar (09/11): card cheio como os outros produtos, nas cores do antigo "em breve" */
 .p-pg{--bg:#0f2a28;--fg:#e6fffb;--fg2:rgba(230,255,251,.76);--tom:#5eead4;--sobre-tom:#062320;--palco:linear-gradient(160deg,#145a52,#0b201e)}
 .p-pg .prod-cab img{background:#062320;padding:8px}
+
+/* varal com 5 etiquetas (09/11): PartiuGringa depois do H2HScout, nas cores do card. Só na v4; a v3 (rollback) segue com 4 */
+.t-pg{--bg:#0f2a28;--fg:#e6fffb}
+.etiquetas li:nth-child(5){--r:-1.5deg}
+@media (prefers-reduced-motion:no-preference){.etiquetas li:nth-child(5){--i:4}}
+/* 5 colunas no desktop: logo em cima do nome, como no celular (lado a lado, "PartiuGringa" espremia o logo) */
+@media (min-width:901px){
+  .etiquetas{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .tag{grid-template-columns:1fr;column-gap:0;row-gap:4px}
+  .tag img{grid-row:auto;margin-bottom:8px}
+  .etiquetas li{display:flex;flex-direction:column}
+  .etiquetas li .tag{flex:1}
+}
+@media (min-width:901px) and (max-width:1199px){
+  .tag{padding:22px 16px 16px}
+  .tag b{font-size:24px}
+  .tag span{font-size:14px}
+}
+/* no celular (2 colunas) a 5ª fica sozinha na última linha, centrada e com a largura de uma coluna */
+@media (max-width:900px){.etiquetas li:nth-child(5){grid-column:1/-1;justify-self:center;width:calc(50% - clamp(12px,2vw,28px) / 2)}}
