@@ -67,6 +67,9 @@ const PAGINAS = [
   ['index-v4.html', 'vitrine-v4.html', 'partes/rodape-v4.html', 'v4'],
   ['privacy-v4.html', 'privacy-v4.html', 'partes/rodape-v4.html', 'v4'],
   ['terms-v4.html', 'terms-v4.html', 'partes/rodape-v4.html', 'v4'],
+  // /about e /press (13/11): textos do SEO & Growth, no layout das páginas legais
+  ['about-v4.html', 'about-v4.html', 'partes/rodape-v4.html', 'v4'],
+  ['press-v4.html', 'press-v4.html', 'partes/rodape-v4.html', 'v4'],
   ['404-v4.html', '404-v4.html', 'partes/rodape-v4.html', 'v4'],
   ['privacidade/index.html', 'privacidade.html'],
   ['termos/index.html', 'termos.html'],
@@ -75,7 +78,7 @@ const PAGINAS = [
 // Blog (13/11): content/posts/*.md -> blog/<slug>.html e blog/index.html, no visual da v4 (ver ferramentas/blog.mjs).
 // POSTS_DIR troca a pasta só para testar o pipeline no local (nunca publique com ela).
 const POSTS_DIR = process.env.POSTS_DIR || path.join(R, 'content', 'posts');
-const ROTAS = new Set(['/', '/privacy', '/terms', '/blog/', ...[...ler('index-v4.html').matchAll(/\sid="([a-z0-9-]+)"/g)].map((m) => '/#' + m[1])]);
+const ROTAS = new Set(['/', '/privacy', '/terms', '/about', '/press', '/blog/', ...[...ler('index-v4.html').matchAll(/\sid="([a-z0-9-]+)"/g)].map((m) => '/#' + m[1])]);
 const POSTS = lerPosts(POSTS_DIR, ROTAS, S);
 for (const p of POSTS) PAGINAS.push([{ html: paginaPost(p) }, `blog/${p.slug}.html`, 'partes/rodape-v4.html', 'v4']);
 PAGINAS.push([{ html: paginaIndice(POSTS) }, 'blog/index.html', 'partes/rodape-v4.html', 'v4']);
@@ -183,12 +186,12 @@ fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: 
 const sitemap = (us, lm = {}) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
   us.map((u) => `<url><loc>https://dcsolutions.app/${u}</loc>${lm[u] ? `<lastmod>${lm[u]}</lastmod>` : ''}</url>`).join('') + '</urlset>\n';
 // lastmod (SEO DC-11): data real da última mudança de cada página. ATUALIZE ao publicar mudança na página.
-const LASTMOD_V4 = { '': '2026-11-13', privacy: '2026-11-13', terms: '2026-11-13' };
+const LASTMOD_V4 = { '': '2026-11-13', privacy: '2026-11-13', terms: '2026-11-13', about: '2026-11-13', press: '2026-11-13' };
 // blog: cada post com lastmod (atualizado ou data); o índice /blog/ só entra quando houver post (sem post ele tem noindex)
 const blogUrls = POSTS.map((p) => `blog/${p.slug}`);
 for (const p of POSTS) LASTMOD_V4[`blog/${p.slug}`] = p.atualizado || p.data;
 if (POSTS.length) LASTMOD_V4['blog/'] = POSTS.map((p) => p.atualizado || p.data).sort().pop();
-fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms', ...(POSTS.length ? ['blog/', ...blogUrls] : [])], LASTMOD_V4));
+fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms', 'about', 'press', ...(POSTS.length ? ['blog/', ...blogUrls] : [])], LASTMOD_V4));
 // IndexNow: a chave é pública por definição (o arquivo na raiz prova que o site é nosso); o ping é ferramentas/indexnow.mjs
 fs.writeFileSync(path.join(D, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 // manifest (SEO DC-13), com os ícones da marca Anel
