@@ -4,6 +4,8 @@
 import fs from 'fs';
 const BASE = process.argv[2];
 const PAGS = [['/', 'vitrine-v4.html'], ['/privacy', 'privacy-v4.html'], ['/terms', 'terms-v4.html'], ['/nao-existe', '404-v4.html']];
+// blog (13/11): o índice e cada post gerado em dist/blog/ (a lista vem do dist, que é o build do mesmo commit)
+PAGS.push(['/blog/', 'blog/index.html'], ...(fs.existsSync('dist/blog') ? fs.readdirSync('dist/blog').filter((f) => f !== 'index.html' && f.endsWith('.html')).map((f) => ['/blog/' + f.slice(0, -5), 'blog/' + f]) : []));
 const PT = / de | da | para | com | não |ção|ções|você|Produtos|Perguntas|Privacidade|Termos de uso|Página|Fale|Feito em|Divin[oó]polis/g;
 const PROIBIDO = /cartola|steam|waitlist|wait ?list|lista de espera|7 days|7 dias|\bfree\b|grátis|official IQ|QI oficial|diagnos|clinical|psycholog|premium|lifetime|\bbets?\b|betting|odds|Over 2|Ambas|App Store|Play Store|Google Play|\bAPK\b|wishlist|guarantee|garantia|testimonial|2\.847|4[,.]9\b|97 ?%|R\$ 500|R\$ 800|sob medida|custom-made|we build for you/gi;
 let total = 0, aceitos = 0;

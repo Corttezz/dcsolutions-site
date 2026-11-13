@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
+import { lerPosts, paginaPost, paginaIndice, INDEXNOW_KEY } from './blog.mjs';
 
 const R = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const S = path.join(R, 'src');
@@ -71,6 +72,13 @@ const PAGINAS = [
   ['termos/index.html', 'termos.html'],
   ['404.html', '404.html'],
 ];
+// Blog (13/11): content/posts/*.md -> blog/<slug>.html e blog/index.html, no visual da v4 (ver ferramentas/blog.mjs).
+// POSTS_DIR troca a pasta só para testar o pipeline no local (nunca publique com ela).
+const POSTS_DIR = process.env.POSTS_DIR || path.join(R, 'content', 'posts');
+const ROTAS = new Set(['/', '/privacy', '/terms', '/blog/', ...[...ler('index-v4.html').matchAll(/\sid="([a-z0-9-]+)"/g)].map((m) => '/#' + m[1])]);
+const POSTS = lerPosts(POSTS_DIR, ROTAS, S);
+for (const p of POSTS) PAGINAS.push([{ html: paginaPost(p) }, `blog/${p.slug}.html`, 'partes/rodape-v4.html', 'v4']);
+PAGINAS.push([{ html: paginaIndice(POSTS) }, 'blog/index.html', 'partes/rodape-v4.html', 'v4']);
 const cssV3 = minCss('css/v3.css');
 const cssV4 = cssV3 + minCss('css/v4.css');
 // JSON-LD da v3: logo novo, as 5 marcas (PartiuGringa e Grimoire sem URL) e quem faz (só o nome, sem links)
@@ -129,7 +137,8 @@ const cabecaLegadoV3 = (s) => {
 for (const [src, dst, rod, v3, legado] of PAGINAS) {
   const m = v3 ? marcaV3 : marca;
   const topoV3 = v3 && ler(v3 === 'v4' ? 'partes/topo-v4.html' : v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
-  let s = (legado ? cabecaLegadoV3(ler(src)) : ler(src))
+  const nome = typeof src === 'object' ? dst : src;
+  let s = (typeof src === 'object' ? src.html : legado ? cabecaLegadoV3(ler(src)) : ler(src))
     .replaceAll('{{TOPO}}', v3 ? topoV3 : topo)
     .replaceAll('{{RODAPE}}', rod ? ler(rod).replaceAll('{{MARCA}}', m) : rodape)
     .replaceAll('{{PRELOAD_V3}}', PRELOAD_V3)
@@ -141,9 +150,10 @@ for (const [src, dst, rod, v3, legado] of PAGINAS) {
     .replaceAll('{{JSONLD_V4}}', jsonldV4b)
     .replaceAll('{{JSONLD_SITE}}', jsonldSite)
     .replaceAll('{{JSONLD}}', jsonld);
-  if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + src);
-  if (/ style="/.test(s)) throw new Error('style inline em ' + src + ' (a CSP bloqueia)');
-  s = s.replace(/>\s+</g, '><');
+  if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + nome);
+  if (/ style="/.test(s)) throw new Error('style inline em ' + nome + ' (a CSP bloqueia)');
+  // o blog não passa pelo aperto de espaços: ele comeria o espaço entre um link e o negrito do texto do post
+  if (!dst.startsWith('blog/')) s = s.replace(/>\s+</g, '><');
   fs.mkdirSync(path.dirname(path.join(D, dst)), { recursive: true });
   fs.writeFileSync(path.join(D, dst), s);
 }
@@ -172,7 +182,13 @@ const sitemap = (us, lm = {}) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlse
   us.map((u) => `<url><loc>https://dcsolutions.app/${u}</loc>${lm[u] ? `<lastmod>${lm[u]}</lastmod>` : ''}</url>`).join('') + '</urlset>\n';
 // lastmod (SEO DC-11): data real da última mudança de cada página. ATUALIZE ao publicar mudança na página.
 const LASTMOD_V4 = { '': '2026-11-13', privacy: '2026-11-13', terms: '2026-11-13' };
-fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms'], LASTMOD_V4));
+// blog: cada post com lastmod (atualizado ou data); o índice /blog/ só entra quando houver post (sem post ele tem noindex)
+const blogUrls = POSTS.map((p) => `blog/${p.slug}`);
+for (const p of POSTS) LASTMOD_V4[`blog/${p.slug}`] = p.atualizado || p.data;
+if (POSTS.length) LASTMOD_V4['blog/'] = POSTS.map((p) => p.atualizado || p.data).sort().pop();
+fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms', ...(POSTS.length ? ['blog/', ...blogUrls] : [])], LASTMOD_V4));
+// IndexNow: a chave é pública por definição (o arquivo na raiz prova que o site é nosso); o ping é ferramentas/indexnow.mjs
+fs.writeFileSync(path.join(D, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 // manifest (SEO DC-13), com os ícones da marca Anel
 fs.writeFileSync(path.join(D, 'site.webmanifest'), JSON.stringify({
   name: 'DC Solutions', short_name: 'DC Solutions', start_url: '/', display: 'browser',
