@@ -79,6 +79,8 @@ export default {
     const ct = res.headers.get('Content-Type') || '';
     const html = ct.startsWith('text/html');
     if (html && !/charset/i.test(ct)) res.headers.set('Content-Type', 'text/html; charset=utf-8');
+    // /llms.txt e demais .txt: charset também no texto puro (13/11)
+    if (ct.startsWith('text/plain') && !/charset/i.test(ct)) res.headers.set('Content-Type', 'text/plain; charset=utf-8');
     // SEO DC-3 (13/11): o no-transform (que impede a Cloudflare de injetar o beacon) também impede a compressão na borda,
     // então o próprio Worker comprime o HTML em gzip quando o navegador aceita.
     // A Cloudflare troca o Accept-Encoding que chega ao Worker; o pedido original do navegador fica em cf.clientAcceptEncoding.
