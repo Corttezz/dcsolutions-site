@@ -2,7 +2,7 @@
 // valida e gera as páginas /blog/<slug> e o índice /blog/. Usado por ferramentas/build.mjs; sem dependências.
 // Regras que fazem o build FALHAR (o post volta ao SEO & Growth com o motivo):
 //   campo obrigatório faltando; idioma diferente de inglês; title > 60; description fora de 140-155; slug inválido ou repetido;
-//   "[CHECK]" no texto; mais de um H1; preço; "Steam"; o nome antigo "Grimoire" (o jogo é Runemoire desde 13/11); H2HScout (não é da DC Solutions);
+//   "[CHECK]" no texto; mais de um H1; preço; "Steam"; o nome antigo "Grimoire" (o jogo é Runemoire desde 13/11);
 //   link interno para página que não existe; CTA fora da vitrine; imagem local que não existe; imagem sem alt.
 import fs from 'fs';
 import path from 'path';
@@ -128,7 +128,6 @@ export function lerPosts(dir, rotasValidas, srcDir) {
     if (/\[CHECK\]/i.test(bruto)) erro('tem [CHECK] (fato não verificado)');
     if (/\bsteam\b/i.test(bruto)) erro('cita Steam');
     if (/grimoire/i.test(bruto)) erro('cita o nome antigo Grimoire (o jogo se chama Runemoire)');
-    if (/h2h/i.test(bruto)) erro('cita o H2HScout (não é produto da DC Solutions; é do Renato e do Vitor)');
     if (PRECO.test(bruto)) erro(`cita preço: "${PRECO.exec(bruto)[0]}"`);
     const cta = fm.cta || '/#products';
     if (!/^\/(#[a-z0-9-]+)?$/.test(cta) || !rotasValidas.has(cta)) erro(`cta "${cta}" não é uma seção da vitrine`);

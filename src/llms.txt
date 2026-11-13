@@ -8,6 +8,7 @@ Run by Daniel Cortez. Contact: contato@dcsolutions.app. Language of this website
 
 - [IQNorth](https://iqnorth.com/en/): Live. Online IQ test with a confidence range: 40 reasoning questions in 6 areas, in about 20 minutes, with the estimated IQ shown with its 95% range and the result by area. In Portuguese, English and Spanish.
 - [Fytform](https://fytform.com/): Live. Workouts and diet built around you: 17 questions in about 5 minutes give the week's workouts and a diet in grams, with swaps, on your phone. In Portuguese.
+- [H2HScout](https://h2hscout.com/): Closed beta. Statistical analysis of the Brasileirão Série A, with each number adjusted for the strength of the opponent. In Portuguese.
 - [PartiuGringa](https://partiugringa.com/): Live. Helps Brazilian developers land international jobs: an AI review of your LinkedIn profile, remote roles open to LATAM, and a tailored CV for each job. In Portuguese.
 - [Runemoire](https://runemoire.com/): In development. A roguelike deckbuilder in pixel art for PC, in Portuguese, English, Spanish, French and German.
 - [Ismeire Cortez](https://ismeirecortez.com/): Live. Website of nutritionist Ismeire Cortez (CRN9 22936), specialized in obesity and weight loss, with booking via WhatsApp. In Portuguese.
