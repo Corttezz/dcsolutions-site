@@ -93,12 +93,29 @@ const jsonldV4 = JSON.stringify({
   address: { '@type': 'PostalAddress', addressCountry: 'BR' },
   brand: JSON.parse(jsonldV3).brand.map((m) => (m.name === 'IQNorth' ? { ...m, url: 'https://iqnorth.com/en/' } : m.name === 'PartiuGringa' ? { ...m, url: 'https://partiugringa.com/' } : m)),
 });
+// SEO DC-1/DC-2 (13/11): @id da organização, URL do jogo (runemoire.com, nome novo em alternateName; o card segue "Grimoire"
+// até o logo novo aparecer no runemoire.com) e bloco WebSite. sameAs fica de fora: a empresa não tem perfil oficial próprio.
+const jsonldV4b = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@id': 'https://dcsolutions.app/#organization',
+  ...JSON.parse(jsonldV4),
+  brand: JSON.parse(jsonldV4).brand.map((m) => (m.name === 'Grimoire' ? { ...m, alternateName: 'Runemoire', url: 'https://runemoire.com/' } : m)),
+});
+const jsonldSite = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'DC Solutions',
+  url: 'https://dcsolutions.app/',
+  inLanguage: 'en',
+  publisher: { '@id': 'https://dcsolutions.app/#organization' },
+});
 const PRELOAD_V3 = ['barlow-400', 'barlow-600', 'barlow-cond-700', 'barlow-cond-600']
   .map((f) => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('\n');
 const ICONES_V3 = [
   '<link rel="icon" href="/assets/v3/marca/favicon.ico" sizes="32x32">',
   '<link rel="icon" href="/assets/v3/marca/favicon.svg" type="image/svg+xml">',
   '<link rel="apple-touch-icon" href="/assets/v3/apple-touch-icon.png">',
+  '<link rel="manifest" href="/site.webmanifest">',
 ].join('\n');
 const cabecaLegadoV3 = (s) => {
   const trocas = [
@@ -121,7 +138,8 @@ for (const [src, dst, rod, v3, legado] of PAGINAS) {
     .replaceAll('{{CABECA_JS}}', cab)
     .replaceAll('{{CORPO_JS}}', corpo)
     .replaceAll('{{JSONLD_V3}}', jsonldV3)
-    .replaceAll('{{JSONLD_V4}}', jsonldV4)
+    .replaceAll('{{JSONLD_V4}}', jsonldV4b)
+    .replaceAll('{{JSONLD_SITE}}', jsonldSite)
     .replaceAll('{{JSONLD}}', jsonld);
   if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + src);
   if (/ style="/.test(s)) throw new Error('style inline em ' + src + ' (a CSP bloqueia)');
@@ -150,9 +168,20 @@ if (fs.existsSync(path.join(G, 'apple-touch-icon.png'))) fs.copyFileSync(path.jo
 if (fs.existsSync(path.join(G, 'og.jpg'))) fs.copyFileSync(path.join(G, 'og.jpg'), path.join(D, 'assets/og.jpg'));
 fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: https://dcsolutions.app/sitemap.xml\n');
 // sitemap.xml é o da v4; o Worker serve sitemap-v3.xml no lugar dele com VITRINE_V4 desligada
-const sitemap = (us) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
-  us.map((u) => `<url><loc>https://dcsolutions.app/${u}</loc></url>`).join('') + '</urlset>\n';
-fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms']));
+const sitemap = (us, lm = {}) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+  us.map((u) => `<url><loc>https://dcsolutions.app/${u}</loc>${lm[u] ? `<lastmod>${lm[u]}</lastmod>` : ''}</url>`).join('') + '</urlset>\n';
+// lastmod (SEO DC-11): data real da última mudança de cada página. ATUALIZE ao publicar mudança na página.
+const LASTMOD_V4 = { '': '2026-11-13', privacy: '2026-11-13', terms: '2026-11-13' };
+fs.writeFileSync(path.join(D, 'sitemap.xml'), sitemap(['', 'privacy', 'terms'], LASTMOD_V4));
+// manifest (SEO DC-13), com os ícones da marca Anel
+fs.writeFileSync(path.join(D, 'site.webmanifest'), JSON.stringify({
+  name: 'DC Solutions', short_name: 'DC Solutions', start_url: '/', display: 'browser',
+  background_color: '#f1f2ee', theme_color: '#1f2d4d',
+  icons: [
+    { src: '/assets/v3/marca/icone-192.png', sizes: '192x192', type: 'image/png' },
+    { src: '/assets/v3/marca/icone-512.png', sizes: '512x512', type: 'image/png' },
+  ],
+}) + '\n');
 fs.writeFileSync(path.join(D, 'sitemap-v3.xml'), sitemap(['', 'en', 'privacidade', 'termos']));
 // OG da v4: a imagem em inglês da v3 (sem cidade), num endereço novo por causa do cache de 30 dias
 fs.mkdirSync(path.join(D, 'assets/v4'), { recursive: true });
