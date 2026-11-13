@@ -6,7 +6,6 @@ idioma: "en"
 palavra_chave: "what is an mvp"
 categoria: "Product"
 data: "2026-11-13"
-atualizado: "2026-11-13"
 imagem: "/assets/blog/what-is-an-mvp.jpg | Blueprint drawing of a simple working machine next to a far more complex version of the same machine"
 links_internos: ["/", "/#products", "/blog/", "/#iqnorth", "/#partiugringa", "/#h2hscout", "/#runemoire"]
 cta: "/#products"
