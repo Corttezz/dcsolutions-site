@@ -153,6 +153,9 @@
 .post-corpo table{border-collapse:collapse;width:100%;font-size:16px}
 .post-corpo th,.post-corpo td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--linha);vertical-align:top}
 .post-corpo th{font-weight:600;color:var(--anil)}
+.post-corpo blockquote{margin-left:0;margin-right:0}
+/* /about (13/11): no celular, cada linha da tabela de produtos vira um bloco empilhado */
+@media (max-width:600px){.tabela-pilha thead{display:none}.tabela-pilha table,.tabela-pilha tbody,.tabela-pilha tr,.tabela-pilha td{display:block;width:100%}.tabela-pilha tr{padding:12px 0;border-bottom:1px solid var(--linha)}.tabela-pilha td{border:0;padding:2px 0}.tabela-pilha td:first-child{font-weight:600;color:var(--anil)}}
 .post-cta{margin-top:40px;padding:26px;border-radius:var(--raio);background:var(--anil);color:var(--algodao);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
 .post-cta p{margin:0;max-width:440px}
 .post-cta .btn{margin-top:0}

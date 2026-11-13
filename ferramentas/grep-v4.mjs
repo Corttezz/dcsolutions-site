@@ -3,7 +3,7 @@
 // uso: node ferramentas/grep-v4.mjs <base_url>   (padrão: arquivos de dist/)
 import fs from 'fs';
 const BASE = process.argv[2];
-const PAGS = [['/', 'vitrine-v4.html'], ['/privacy', 'privacy-v4.html'], ['/terms', 'terms-v4.html'], ['/nao-existe', '404-v4.html']];
+const PAGS = [['/', 'vitrine-v4.html'], ['/privacy', 'privacy-v4.html'], ['/terms', 'terms-v4.html'], ['/about', 'about-v4.html'], ['/press', 'press-v4.html'], ['/nao-existe', '404-v4.html']];
 // blog (13/11): o índice e cada post gerado em dist/blog/ (a lista vem do dist, que é o build do mesmo commit)
 PAGS.push(['/blog/', 'blog/index.html'], ...(fs.existsSync('dist/blog') ? fs.readdirSync('dist/blog').filter((f) => f !== 'index.html' && f.endsWith('.html')).map((f) => ['/blog/' + f.slice(0, -5), 'blog/' + f]) : []));
 const PT = / de | da | para | com | não |ção|ções|você|Produtos|Perguntas|Privacidade|Termos de uso|Página|Fale|Feito em|Divin[oó]polis/g;
