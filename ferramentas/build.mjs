@@ -34,7 +34,7 @@ const jsonld = JSON.stringify({
   legalName: 'DC SOLUTIONS LTDA',
   taxID: '63.680.570/0001-90',
   url: 'https://dcsolutions.app/',
-  logo: 'https://dcsolutions.app/apple-touch-icon.png',
+  logo: 'https://dcsolutions.app/assets/v4/marca/icone-512.png',
   email: 'contato@dcsolutions.app',
   address: {
     '@type': 'PostalAddress',
@@ -87,7 +87,7 @@ const cssV4 = cssV3 + minCss('css/v4.css');
 // JSON-LD da v3: logo novo, as 5 marcas (PartiuGringa e Grimoire sem URL) e quem faz (só o nome, sem links)
 const jsonldV3 = JSON.stringify({
   ...JSON.parse(jsonld),
-  logo: 'https://dcsolutions.app/assets/v3/marca/icone-512.png',
+  logo: 'https://dcsolutions.app/assets/v4/marca/icone-512.png',
   founder: { '@type': 'Person', name: 'Daniel Cortez' },
   brand: [
     { '@type': 'Brand', name: 'IQNorth', url: 'https://iqnorth.com/' },
@@ -123,9 +123,9 @@ const jsonldSite = JSON.stringify({
 const PRELOAD_V3 = ['barlow-400', 'barlow-600', 'barlow-cond-700', 'barlow-cond-600']
   .map((f) => `<link rel="preload" href="/assets/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('\n');
 const ICONES_V3 = [
-  '<link rel="icon" href="/assets/v3/marca/favicon.ico" sizes="32x32">',
-  '<link rel="icon" href="/assets/v3/marca/favicon.svg" type="image/svg+xml">',
-  '<link rel="apple-touch-icon" href="/assets/v3/apple-touch-icon.png">',
+  // ícone com acabamento (13/11): só ICO (16 da v3, 32 e 48 novos), sem SVG, para o navegador não desenhar o acabamento em 16 px
+  '<link rel="icon" href="/assets/v4/marca/favicon.ico" sizes="16x16 32x32 48x48">',
+  '<link rel="apple-touch-icon" href="/assets/v4/marca/apple-touch-icon.png">',
   '<link rel="manifest" href="/site.webmanifest">',
 ].join('\n');
 const cabecaLegadoV3 = (s) => {
@@ -178,10 +178,10 @@ for (const [, f] of PAGINAS) {
 fs.cpSync(path.join(S, 'assets'), path.join(D, 'assets'), { recursive: true });
 fs.rmSync(path.join(D, 'assets/marca.svg'));
 fs.copyFileSync(path.join(S, 'assets/marca.svg'), path.join(D, 'favicon.svg'));
-// /favicon.ico (pedido automático dos navegadores): o ícone da v3
-fs.copyFileSync(path.join(S, 'assets/v3/marca/favicon.ico'), path.join(D, 'favicon.ico'));
+// /favicon.ico e /apple-touch-icon.png (pedidos automáticos dos navegadores e do iOS): o ícone com acabamento (13/11)
+fs.copyFileSync(path.join(S, 'assets/v4/marca/favicon.ico'), path.join(D, 'favicon.ico'));
 const G = path.join(R, 'gerado');
-if (fs.existsSync(path.join(G, 'apple-touch-icon.png'))) fs.copyFileSync(path.join(G, 'apple-touch-icon.png'), path.join(D, 'apple-touch-icon.png'));
+fs.copyFileSync(path.join(S, 'assets/v4/marca/apple-touch-icon.png'), path.join(D, 'apple-touch-icon.png'));
 if (fs.existsSync(path.join(G, 'og.jpg'))) fs.copyFileSync(path.join(G, 'og.jpg'), path.join(D, 'assets/og.jpg'));
 // /llms.txt (13/11): resumo da empresa e dos produtos para assistentes de IA; só fato que já está na vitrine. Fora do sitemap.
 // Seção "## Blog" gerada dos posts (13/11): cada post novo entra sozinho no mesmo deploy; sem post, não há seção.
@@ -208,8 +208,8 @@ fs.writeFileSync(path.join(D, 'site.webmanifest'), JSON.stringify({
   name: 'DC Solutions', short_name: 'DC Solutions', start_url: '/', display: 'browser',
   background_color: '#f1f2ee', theme_color: '#1f2d4d',
   icons: [
-    { src: '/assets/v3/marca/icone-192.png', sizes: '192x192', type: 'image/png' },
-    { src: '/assets/v3/marca/icone-512.png', sizes: '512x512', type: 'image/png' },
+    { src: '/assets/v4/marca/icone-192.png', sizes: '192x192', type: 'image/png' },
+    { src: '/assets/v4/marca/icone-512.png', sizes: '512x512', type: 'image/png' },
   ],
 }) + '\n');
 fs.writeFileSync(path.join(D, 'sitemap-v3.xml'), sitemap(['', 'en', 'privacidade', 'termos']));
