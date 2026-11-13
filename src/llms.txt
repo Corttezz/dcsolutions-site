@@ -6,7 +6,7 @@ Run by Daniel Cortez. Contact: contato@dcsolutions.app. Language of this website
 
 ## Products
 
-- [IQNorth](https://iqnorth.com/en/): Live. Online IQ test with a confidence range: 40 reasoning questions in 6 areas, in about 20 minutes, with the estimated IQ shown with its 95% range and the result by area. In Portuguese, English and Spanish.
+- [IQNorth](https://iqnorth.com/en/): Live. Online IQ test with a confidence range: 40 reasoning questions in 6 areas, in about 20 minutes, with the estimated IQ shown with its 95% range and the result by area. In Portuguese, English, Spanish, Turkish, Polish and Indonesian.
 - [Fytform](https://fytform.com/): Live. Workouts and diet built around you: 17 questions in about 5 minutes give the week's workouts and a diet in grams, with swaps, on your phone. In Portuguese.
 - [H2HScout](https://h2hscout.com/): Closed beta. Statistical analysis of the Brasileirão Série A, with each number adjusted for the strength of the opponent. In Portuguese.
 - [PartiuGringa](https://partiugringa.com/): Live. Helps Brazilian developers land international jobs: an AI review of your LinkedIn profile, remote roles open to LATAM, and a tailored CV for each job. In Portuguese.
@@ -16,5 +16,7 @@ Run by Daniel Cortez. Contact: contato@dcsolutions.app. Language of this website
 ## Company website
 
 - [Home](https://dcsolutions.app/): The company and its products, how we work, FAQ and contact.
+- [About](https://dcsolutions.app/about): What DC Solutions does, its products, how it works and company details.
+- [Press kit](https://dcsolutions.app/press): Facts, product sheets, logo and press contact.
 - [Privacy](https://dcsolutions.app/privacy): How this website handles personal data: no cookies, no tracking, only what you send us by email.
 - [Terms of use](https://dcsolutions.app/terms): Terms of use of this website; each product has its own terms.
