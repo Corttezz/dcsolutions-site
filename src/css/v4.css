@@ -105,6 +105,7 @@
 
 /* PartiuGringa no ar (09/11): card cheio como os outros produtos, nas cores do antigo "em breve" */
 .grim{--sobre-tom:#1a110d}
+@media (max-width:760px){.grim .grim-logo{width:289px}}
 .p-pg{--bg:#0f2a28;--fg:#e6fffb;--fg2:rgba(230,255,251,.76);--tom:#5eead4;--sobre-tom:#062320;--palco:linear-gradient(160deg,#145a52,#0b201e)}
 .p-pg .prod-cab img{background:#062320;padding:8px}
 

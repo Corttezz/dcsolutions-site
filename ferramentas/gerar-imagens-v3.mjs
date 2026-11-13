@@ -3,6 +3,8 @@
 // - src/assets/v3/apple-touch-icon.png (180x180)
 // - src/assets/v3/marca/icone-{16,32,48,192,512}.png e favicon.ico (16, 32 e 48 em PNG dentro do ICO)
 // uso: node ferramentas/gerar-imagens-v3.mjs
+// OG_V4=1 node ferramentas/gerar-imagens-v3.mjs: só a OG em inglês da v4, com Runemoire no lugar de Grimoire (13/11),
+//   em src/assets/v4/og-20261113.jpg (nome novo por causa do cache de 30 dias de /assets); não toca nas imagens da v3.
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -26,7 +28,7 @@ const TAGS = [
   ['#3a34c4', '#f7f5f0', 'IQNorth', 'assets/v3/logos/iqnorth.svg', -1.5],
   ['#84cc16', '#06080f', 'Fytform', 'assets/v3/logos/fytform.svg', 1],
   ['#f6b73c', '#14201b', 'H2HScout', 'assets/v3/logos/h2hscout.svg', -1],
-  ['#2a1a12', '#efe2c4', 'Grimoire', 'assets/v3/grimoire/icone-112.webp', 1.5],
+  process.env.OG_V4 ? ['#2a1a12', '#efe2c4', 'Runemoire', 'assets/v4/runemoire/icone-112.webp', 1.5] : ['#2a1a12', '#efe2c4', 'Grimoire', 'assets/v3/grimoire/icone-112.webp', 1.5],
   ['#0f2a28', '#e6fffb', 'PartiuGringa', 'assets/logos/partiugringa.svg', -1],
   ['#e7efe9', '#0f3a31', 'Ismeire Cortez', 'assets/v3/logos/ismeire.svg', 1],
 ];
@@ -48,6 +50,14 @@ div{width:${px}px;height:${px}px;border-radius:${raio}px;background:#1f2d4d;disp
 
 const b = await chromium.launch({ executablePath: 'C:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe', headless: true });
 const p = await b.newPage({ viewport: { width: 1200, height: 630 } });
+if (process.env.OG_V4) {
+  await p.setContent(og('Small products, made to solve one thing.'));
+  await p.waitForTimeout(500);
+  await p.screenshot({ path: path.join(S, 'assets/v4/og-20261113.jpg'), type: 'jpeg', quality: 86 });
+  await b.close();
+  console.log('og v4 ok');
+  process.exit(0);
+}
 for (const [arq, titulo] of [['og.jpg', 'Produtos pequenos, feitos para resolver uma coisa.'], ['og-en.jpg', 'Small products, made to solve one thing.']]) {
   await p.setContent(og(titulo));
   await p.waitForTimeout(500);

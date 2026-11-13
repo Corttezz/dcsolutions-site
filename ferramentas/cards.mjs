@@ -12,10 +12,10 @@ for (const [larg, cel] of [[1440, false], [390, true]]) {
   await p.goto(BASE + '/', { waitUntil: 'networkidle' });
   await p.evaluate(async () => { for (const i of document.images) i.loading = 'eager'; await Promise.all([...document.images].map((i) => i.decode().catch(() => {}))); await document.fonts.ready; });
   await p.waitForTimeout(600);
-  for (const id of ['iqnorth', 'fytform', 'h2hscout', 'partiugringa', 'ismeire', 'grimoire']) {
+  for (const id of ['iqnorth', 'fytform', 'h2hscout', 'partiugringa', 'ismeire', 'runemoire']) {
     const el = p.locator('#' + id);
     // no celular, só o palco com os aparelhos (o card inteiro é alto demais para ver os detalhes)
-    const alvo = cel && id !== 'grimoire' ? el.locator('.palco') : el;
+    const alvo = cel && id !== 'runemoire' ? el.locator('.palco') : el;
     await alvo.screenshot({ path: `${OUT}/${ROT}-${id}-${larg}.png` });
   }
   console.log(larg, 'ok');

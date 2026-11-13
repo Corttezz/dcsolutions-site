@@ -7,7 +7,7 @@ const PAGS = [['/', 'vitrine-v4.html'], ['/privacy', 'privacy-v4.html'], ['/term
 // blog (13/11): o índice e cada post gerado em dist/blog/ (a lista vem do dist, que é o build do mesmo commit)
 PAGS.push(['/blog/', 'blog/index.html'], ...(fs.existsSync('dist/blog') ? fs.readdirSync('dist/blog').filter((f) => f !== 'index.html' && f.endsWith('.html')).map((f) => ['/blog/' + f.slice(0, -5), 'blog/' + f]) : []));
 const PT = / de | da | para | com | não |ção|ções|você|Produtos|Perguntas|Privacidade|Termos de uso|Página|Fale|Feito em|Divin[oó]polis/g;
-const PROIBIDO = /cartola|steam|waitlist|wait ?list|lista de espera|7 days|7 dias|\bfree\b|grátis|official IQ|QI oficial|diagnos|clinical|psycholog|premium|lifetime|\bbets?\b|betting|odds|Over 2|Ambas|App Store|Play Store|Google Play|\bAPK\b|wishlist|guarantee|garantia|testimonial|2\.847|4[,.]9\b|97 ?%|R\$ 500|R\$ 800|sob medida|custom-made|we build for you/gi;
+const PROIBIDO = /cartola|steam|waitlist|wait ?list|lista de espera|7 days|7 dias|\bfree\b|grátis|official IQ|QI oficial|diagnos|clinical|psycholog|premium|lifetime|\bbets?\b|betting|odds|Over 2|Ambas|App Store|Play Store|Google Play|\bAPK\b|wishlist|guarantee|garantia|testimonial|2\.847|4[,.]9\b|97 ?%|R\$ 500|R\$ 800|sob medida|custom-made|we build for you|grimoire/gi;
 let total = 0, aceitos = 0;
 for (const [u, f] of PAGS) {
   const html = BASE ? await (await fetch(BASE + u)).text() : fs.readFileSync('dist/' + f, 'utf8');
@@ -17,6 +17,8 @@ for (const [u, f] of PAGS) {
   for (const [nome, re] of [['português', PT], ['proibido', PROIBIDO]]) {
     for (const l of linhas) for (const m of l.matchAll(re)) {
       // "Divinópolis" só pode aparecer em dois lugares: o endereço legal do rodapé (todas as páginas) e o foro de /terms
+      // "Grimoire" (nome antigo do Runemoire, 13/11) só no alternateName do JSON-LD; o id de atalho #grimoire some porque o id é ignorado
+      if (/grimoire/i.test(m[0]) && l.slice(Math.max(0, m.index - 17), m.index) === '"alternateName":"') { aceitos++; console.log(u, 'permitido', JSON.stringify(m[0]), '→ alternateName'); continue; }
       const permitido = /Divin/.test(m[0]) && (l.startsWith('<address>') || (u === '/terms' && /courts of the district of Divinópolis, Minas Gerais, Brazil/.test(l)));
       if (permitido) { aceitos++; console.log(u, 'permitido', JSON.stringify(m[0]), '→', l.trim().slice(0, 140)); continue; }
       total++; console.log(u, nome, JSON.stringify(m[0]), '→', l.trim().slice(0, 140));

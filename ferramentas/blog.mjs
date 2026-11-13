@@ -2,7 +2,7 @@
 // valida e gera as páginas /blog/<slug> e o índice /blog/. Usado por ferramentas/build.mjs; sem dependências.
 // Regras que fazem o build FALHAR (o post volta ao SEO & Growth com o motivo):
 //   campo obrigatório faltando; idioma diferente de inglês; title > 60; description fora de 140-155; slug inválido ou repetido;
-//   "[CHECK]" no texto; mais de um H1; preço; "Steam"; o nome "Runemoire" (o domínio runemoire.com pode);
+//   "[CHECK]" no texto; mais de um H1; preço; "Steam"; o nome antigo "Grimoire" (o jogo é Runemoire desde 13/11);
 //   link interno para página que não existe; CTA fora da vitrine; imagem local que não existe; imagem sem alt.
 import fs from 'fs';
 import path from 'path';
@@ -127,7 +127,7 @@ export function lerPosts(dir, rotasValidas, srcDir) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(fm.data) || (fm.atualizado && !/^\d{4}-\d{2}-\d{2}$/.test(fm.atualizado))) erro('data fora do formato AAAA-MM-DD');
     if (/\[CHECK\]/i.test(bruto)) erro('tem [CHECK] (fato não verificado)');
     if (/\bsteam\b/i.test(bruto)) erro('cita Steam');
-    if (/runemoire(?!\.com)/i.test(bruto)) erro('cita o nome Runemoire (só o domínio runemoire.com pode)');
+    if (/grimoire/i.test(bruto)) erro('cita o nome antigo Grimoire (o jogo se chama Runemoire)');
     if (PRECO.test(bruto)) erro(`cita preço: "${PRECO.exec(bruto)[0]}"`);
     const cta = fm.cta || '/#products';
     if (!/^\/(#[a-z0-9-]+)?$/.test(cta) || !rotasValidas.has(cta)) erro(`cta "${cta}" não é uma seção da vitrine`);
@@ -166,7 +166,7 @@ export function lerPosts(dir, rotasValidas, srcDir) {
   return posts.sort((a, b) => (a.data < b.data ? 1 : a.data > b.data ? -1 : a.slug.localeCompare(b.slug)));
 }
 
-const OG = `${SITE}/assets/v4/og.jpg`;
+const OG = `${SITE}/assets/v4/og-20261113.jpg`;
 const cabeca = ({ titulo, desc, url, tipo, robots, imagem, extra = '' }) => `<!doctype html>
 <html lang="en">
 <head>
