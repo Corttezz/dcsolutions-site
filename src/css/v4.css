@@ -138,7 +138,7 @@
 .post-meta{font-size:14px;color:var(--cinza);margin-bottom:12px}
 .post-meta span{text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--anil)}
 .post h1{overflow-wrap:break-word}
-.post-capa{display:block;width:100%;height:auto;margin-top:28px;border-radius:var(--raio)}
+.post-capa{display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover;margin-top:28px;border-radius:var(--raio)}
 .post-corpo{font-size:18px;line-height:1.65}
 .post-corpo h3{margin-top:28px;font-family:var(--cond);font-weight:700;font-size:22px;line-height:1.15;color:var(--anil)}
 .post-corpo h4{margin-top:22px;font-weight:600;color:var(--anil)}

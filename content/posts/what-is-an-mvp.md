@@ -6,7 +6,8 @@ idioma: "en"
 palavra_chave: "what is an mvp"
 categoria: "Product"
 data: "2026-11-13"
-imagem: "Whiteboard with a single product idea circled and three crossed-out feature lists beside it | alt: Whiteboard sketch explaining what an MVP is, one core feature kept and extra features crossed out"
+atualizado: "2026-11-13"
+imagem: "/assets/blog/what-is-an-mvp.jpg | Blueprint drawing of a simple working machine next to a far more complex version of the same machine"
 links_internos: ["/", "/#products", "/blog/", "/#iqnorth", "/#partiugringa", "/#h2hscout", "/#runemoire"]
 cta: "/#products"
 ---
