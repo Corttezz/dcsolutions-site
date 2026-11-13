@@ -176,6 +176,8 @@ fs.copyFileSync(path.join(S, 'assets/v3/marca/favicon.ico'), path.join(D, 'favic
 const G = path.join(R, 'gerado');
 if (fs.existsSync(path.join(G, 'apple-touch-icon.png'))) fs.copyFileSync(path.join(G, 'apple-touch-icon.png'), path.join(D, 'apple-touch-icon.png'));
 if (fs.existsSync(path.join(G, 'og.jpg'))) fs.copyFileSync(path.join(G, 'og.jpg'), path.join(D, 'assets/og.jpg'));
+// /llms.txt (13/11): resumo da empresa e dos produtos para assistentes de IA; só fato que já está na vitrine. Fora do sitemap.
+fs.copyFileSync(path.join(S, 'llms.txt'), path.join(D, 'llms.txt'));
 fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: https://dcsolutions.app/sitemap.xml\n');
 // sitemap.xml é o da v4; o Worker serve sitemap-v3.xml no lugar dele com VITRINE_V4 desligada
 const sitemap = (us, lm = {}) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
