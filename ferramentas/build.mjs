@@ -180,7 +180,12 @@ const G = path.join(R, 'gerado');
 if (fs.existsSync(path.join(G, 'apple-touch-icon.png'))) fs.copyFileSync(path.join(G, 'apple-touch-icon.png'), path.join(D, 'apple-touch-icon.png'));
 if (fs.existsSync(path.join(G, 'og.jpg'))) fs.copyFileSync(path.join(G, 'og.jpg'), path.join(D, 'assets/og.jpg'));
 // /llms.txt (13/11): resumo da empresa e dos produtos para assistentes de IA; só fato que já está na vitrine. Fora do sitemap.
-fs.copyFileSync(path.join(S, 'llms.txt'), path.join(D, 'llms.txt'));
+// Seção "## Blog" gerada dos posts (13/11): cada post novo entra sozinho no mesmo deploy; sem post, não há seção.
+const llmsBlog = POSTS.length
+  ? '\n## Blog\n\n- [Blog](https://dcsolutions.app/blog/): Articles from DC Solutions on how we plan, build, launch and look after small digital products.\n' +
+    [...POSTS].sort((a, b) => (b.data > a.data ? 1 : -1)).map((p) => `- [${p.titulo}](https://dcsolutions.app/blog/${p.slug}): ${p.descricao}\n`).join('')
+  : '';
+fs.writeFileSync(path.join(D, 'llms.txt'), fs.readFileSync(path.join(S, 'llms.txt'), 'utf8').trimEnd() + '\n' + llmsBlog);
 fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: https://dcsolutions.app/sitemap.xml\n');
 // sitemap.xml é o da v4; o Worker serve sitemap-v3.xml no lugar dele com VITRINE_V4 desligada
 const sitemap = (us, lm = {}) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
