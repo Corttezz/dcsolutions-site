@@ -16,7 +16,7 @@ const rel = {};
 
 async function abrir(opts, url = '/', bloquear = false) {
   const ctx = await b.newContext({ deviceScaleFactor: 1, locale: 'en-US', ...opts });
-  if (bloquear) await ctx.route(/\/assets\/(v4\/(telas|grimoire)|v3\/(logos|grimoire)|logos)\//, (r) => r.abort());
+  if (bloquear) await ctx.route(/\/assets\/(v4\/(telas|runemoire)|v3\/(logos|grimoire)|logos)\//, (r) => r.abort());
   const p = await ctx.newPage();
   await p.goto(BASE + url, { waitUntil: 'networkidle' });
   await p.evaluate(async () => { for (const i of document.images) i.loading = 'eager'; await Promise.all([...document.images].map((i) => i.decode().catch(() => {}))); await document.fonts.ready; });

@@ -101,13 +101,13 @@ const jsonldV4 = JSON.stringify({
   address: { '@type': 'PostalAddress', addressCountry: 'BR' },
   brand: JSON.parse(jsonldV3).brand.map((m) => (m.name === 'IQNorth' ? { ...m, url: 'https://iqnorth.com/en/' } : m.name === 'PartiuGringa' ? { ...m, url: 'https://partiugringa.com/' } : m)),
 });
-// SEO DC-1/DC-2 (13/11): @id da organização, URL do jogo (runemoire.com, nome novo em alternateName; o card segue "Grimoire"
-// até o logo novo aparecer no runemoire.com) e bloco WebSite. sameAs fica de fora: a empresa não tem perfil oficial próprio.
+// SEO DC-1/DC-2 (13/11): @id da organização, URL do jogo e bloco WebSite. Nome do jogo: Runemoire desde 13/11 (logo novo
+// aprovado); "Grimoire" fica em alternateName por um tempo, para quem busca o nome antigo e bloco WebSite. sameAs fica de fora: a empresa não tem perfil oficial próprio.
 const jsonldV4b = JSON.stringify({
   '@context': 'https://schema.org',
   '@id': 'https://dcsolutions.app/#organization',
   ...JSON.parse(jsonldV4),
-  brand: JSON.parse(jsonldV4).brand.map((m) => (m.name === 'Grimoire' ? { ...m, alternateName: 'Runemoire', url: 'https://runemoire.com/' } : m)),
+  brand: JSON.parse(jsonldV4).brand.map((m) => (m.name === 'Grimoire' ? { ...m, name: 'Runemoire', alternateName: 'Grimoire', url: 'https://runemoire.com/' } : m)),
 });
 const jsonldSite = JSON.stringify({
   '@context': 'https://schema.org',
