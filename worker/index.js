@@ -29,6 +29,10 @@ export default {
     // (Location montada à mão: new URL('//', url) viraria endereço sem esquema.)
     const limpo = p.replace(/\/{2,}/g, '/').replace(/\/index\.html$/, '/');
     if (limpo !== p) return redir(url.origin + limpo + url.search);
+    // Blog (13/11): /blog -> /blog/; /blog/<slug>/ e /blog/<slug>.html -> /blog/<slug> (endereço canônico do post).
+    if (p === '/blog') return redir(url.origin + '/blog/' + url.search);
+    const post = /^\/blog\/([a-z0-9-]+)(\/|\.html)$/.exec(p);
+    if (post) return redir(url.origin + '/blog/' + post[1] + url.search);
     // Vitrine v2 atrás da flag VITRINE_V2 ('1' liga). Desligada: / segue igual e /vitrine-v2.html dá 404.
     const ligada = env.VITRINE_V2 === '1';
     // Vitrine v3 (revisão 08/11) atrás da flag VITRINE_V3 ('1' liga; tem prioridade sobre a v2).

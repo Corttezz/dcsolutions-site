@@ -127,3 +127,37 @@
 }
 /* no celular (2 colunas) a 5ª fica sozinha na última linha, centrada e com a largura de uma coluna */
 @media (max-width:900px){.etiquetas li:nth-child(5){grid-column:1/-1;justify-self:center;width:calc(50% - clamp(12px,2vw,28px) / 2)}}
+
+/* blog (13/11): índice /blog/ e posts /blog/<slug>, sobre o layout .doc das páginas legais */
+.migalhas ol{list-style:none;padding:0;margin:0 0 22px;display:flex;flex-wrap:wrap;gap:6px;font-size:14px;color:var(--cinza)}
+.migalhas li{margin-top:0}
+.migalhas li+li::before{content:"/";margin-right:6px}
+.migalhas a{color:var(--cinza)}
+.migalhas [aria-current]{color:var(--grafite);overflow-wrap:anywhere}
+.post-meta{font-size:14px;color:var(--cinza);margin-bottom:12px}
+.post-meta span{text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--anil)}
+.post h1{overflow-wrap:break-word}
+.post-capa{display:block;width:100%;height:auto;margin-top:28px;border-radius:var(--raio)}
+.post-corpo{font-size:18px;line-height:1.65}
+.post-corpo h3{margin-top:28px;font-family:var(--cond);font-weight:700;font-size:22px;line-height:1.15;color:var(--anil)}
+.post-corpo h4{margin-top:22px;font-weight:600;color:var(--anil)}
+.post-corpo ol{list-style:decimal;padding-left:24px}
+.post-corpo img{display:block;max-width:100%;height:auto;margin-top:20px;border-radius:12px}
+.post-corpo blockquote{margin-top:20px;padding-left:18px;border-left:3px solid var(--anil);color:var(--grafite)}
+.post-corpo code{font-family:ui-monospace,Consolas,monospace;font-size:.9em;background:var(--algodao-2);padding:1px 5px;border-radius:4px}
+.post-corpo pre{margin-top:16px;overflow-x:auto;background:var(--algodao-2);padding:14px;border-radius:10px}
+.post-corpo pre code{background:none;padding:0}
+.post-corpo hr{margin-top:32px;border:0;border-top:1px solid var(--linha)}
+.post-corpo .tabela{margin-top:18px;overflow-x:auto}
+.post-corpo table{border-collapse:collapse;width:100%;font-size:16px}
+.post-corpo th,.post-corpo td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--linha);vertical-align:top}
+.post-corpo th{font-weight:600;color:var(--anil)}
+.post-cta{margin-top:40px;padding:26px;border-radius:var(--raio);background:var(--anil);color:var(--algodao);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.post-cta p{margin:0;max-width:440px}
+.post-cta .btn{margin-top:0}
+.doc .post-lista{list-style:none;padding:0;margin-top:28px}
+.doc .post-lista li{margin-top:0;padding:24px 0;border-top:1px solid var(--linha)}
+.post-lista h2{margin-top:0}
+.post-lista h2 a{text-decoration:none}
+.post-lista h2 a:hover{text-decoration:underline}
+.post-vazio{margin-top:28px;color:var(--cinza)}
