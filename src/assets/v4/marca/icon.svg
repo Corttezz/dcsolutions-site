@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48" width="1024" height="1024">
+<defs>
+<linearGradient id="dc-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C3E66"/><stop offset=".55" stop-color="#1F2D4D"/><stop offset="1" stop-color="#16203A"/></linearGradient>
+<radialGradient id="dc-luz" cx=".5" cy="-.05" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".6" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="dc-vinheta" cx=".5" cy=".45" r=".75"><stop offset=".65" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></radialGradient>
+<linearGradient id="dc-aro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".3" stop-color="#fff" stop-opacity=".10"/><stop offset=".85" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".30"/></linearGradient>
+<filter id="dc-sombra" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0.65625" stdDeviation="0.75" flood-color="#000" flood-opacity=".30"/></filter>
+<clipPath id="dc-clip"><rect width="48" height="48" rx="10"/></clipPath>
+<linearGradient id="dc-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#D9DCD4"/></linearGradient>
+</defs>
+<g clip-path="url(#dc-clip)">
+<rect width="48" height="48" fill="url(#dc-bg)"/>
+<g filter="url(#dc-sombra)"><g transform="translate(4.8 4.8) scale(.8)"><path d="M37 13.1A17 17 0 1 0 37 34.9" fill="none" stroke="url(#dc-g)" stroke-width="6"/><path d="M16.5 15.5H23A8.5 8.5 0 0 1 23 32.5H16.5Z" fill="url(#dc-g)"/></g></g>
+<rect width="48" height="48" fill="url(#dc-vinheta)"/>
+<rect width="48" height="48" fill="url(#dc-luz)"/>
+</g>
+<rect x="0.234375" y="0.234375" width="47.53125" height="47.53125" rx="9.8125" fill="none" stroke="url(#dc-aro)" stroke-width="0.46875"/>
+</svg>
