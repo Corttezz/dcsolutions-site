@@ -137,6 +137,9 @@ const cabecaLegadoV3 = (s) => {
   for (const [a, b] of trocas) { if (!s.includes(a)) throw new Error('cabeça legada mudou: ' + a); s = s.replace(a, b); }
   return s;
 };
+// Clarity (13/11, opção A do Lead): só nas páginas v4 públicas, sem cookies (consentv2 negado antes de o script carregar).
+// Opção B (cookies _clck/_clsk + banner) só com OK do Daniel.
+const CLARITY = '<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.crossOrigin="anonymous";t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","zd7s4jl9z8");window.clarity("consentv2",{ad_Storage:"denied",analytics_Storage:"denied"});</script>';
 for (const [src, dst, rod, v3, legado] of PAGINAS) {
   const m = v3 ? marcaV3 : marca;
   const topoV3 = v3 && ler(v3 === 'v4' ? 'partes/topo-v4.html' : v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
@@ -155,6 +158,7 @@ for (const [src, dst, rod, v3, legado] of PAGINAS) {
     .replaceAll('{{JSONLD}}', jsonld);
   if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + nome);
   if (/ style="/.test(s)) throw new Error('style inline em ' + nome + ' (a CSP bloqueia)');
+  if (v3 === 'v4') { if (!s.includes('</head>')) throw new Error('sem </head> em ' + nome); s = s.replace('</head>', CLARITY + '</head>'); }
   // o blog não passa pelo aperto de espaços: ele comeria o espaço entre um link e o negrito do texto do post
   if (!dst.startsWith('blog/')) s = s.replace(/>\s+</g, '><');
   fs.mkdirSync(path.dirname(path.join(D, dst)), { recursive: true });
@@ -215,11 +219,11 @@ fs.copyFileSync(path.join(S, 'assets/v3/og-en.jpg'), path.join(D, 'assets/v4/og.
 
 const csp = [
   "default-src 'none'",
-  `script-src ${[...scr].join(' ')}`,
+  `script-src ${[...scr].join(' ')} https://*.clarity.ms`,
   `style-src ${[...sty].join(' ')}`,
   "img-src 'self' data:",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://*.clarity.ms",
   "manifest-src 'self'",
   "base-uri 'none'",
   "form-action 'none'",
