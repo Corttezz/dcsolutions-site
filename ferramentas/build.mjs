@@ -47,6 +47,7 @@ const jsonld = JSON.stringify({
   brand: [
     { '@type': 'Brand', name: 'IQNorth', url: 'https://iqnorth.com/' },
     { '@type': 'Brand', name: 'Fytform', url: 'https://fytform.com/' },
+    { '@type': 'Brand', name: 'H2HScout', url: 'https://h2hscout.com/' },
     { '@type': 'Brand', name: 'Grimoire' },
   ],
 });
@@ -84,7 +85,6 @@ PAGINAS.push([{ html: paginaIndice(POSTS) }, 'blog/index.html', 'partes/rodape-v
 const cssV3 = minCss('css/v3.css');
 const cssV4 = cssV3 + minCss('css/v4.css');
 // JSON-LD da v3: logo novo, as 5 marcas (PartiuGringa e Grimoire sem URL) e quem faz (só o nome, sem links)
-// H2HScout fora de `brand` (Daniel, 13/11: nada de DC Solutions no H2H); o card segue na vitrine.
 const jsonldV3 = JSON.stringify({
   ...JSON.parse(jsonld),
   logo: 'https://dcsolutions.app/assets/v3/marca/icone-512.png',
@@ -92,6 +92,7 @@ const jsonldV3 = JSON.stringify({
   brand: [
     { '@type': 'Brand', name: 'IQNorth', url: 'https://iqnorth.com/' },
     { '@type': 'Brand', name: 'Fytform', url: 'https://fytform.com/' },
+    { '@type': 'Brand', name: 'H2HScout', url: 'https://h2hscout.com/' },
     { '@type': 'Brand', name: 'Grimoire' },
     { '@type': 'Brand', name: 'PartiuGringa' },
   ],
