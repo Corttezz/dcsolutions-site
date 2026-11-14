@@ -18,5 +18,5 @@ Run by Daniel Cortez. Contact: contato@dcsolutions.app. Language of this website
 - [Home](https://dcsolutions.app/): The company and its products, how we work, FAQ and contact.
 - [About](https://dcsolutions.app/about): What DC Solutions does, its products, how it works and company details.
 - [Press kit](https://dcsolutions.app/press): Facts, product sheets, logo and press contact.
-- [Privacy](https://dcsolutions.app/privacy): How this website handles personal data: no cookies, usage analytics with Microsoft Clarity (without cookies), and only what you send us by email.
+- [Privacy](https://dcsolutions.app/privacy): How this website handles personal data: usage analytics with Microsoft Clarity and its cookies, and what you send us by email.
 - [Terms of use](https://dcsolutions.app/terms): Terms of use of this website; each product has its own terms.

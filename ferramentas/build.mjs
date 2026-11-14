@@ -137,9 +137,10 @@ const cabecaLegadoV3 = (s) => {
   for (const [a, b] of trocas) { if (!s.includes(a)) throw new Error('cabeça legada mudou: ' + a); s = s.replace(a, b); }
   return s;
 };
-// Clarity (13/11, opção A do Lead): só nas páginas v4 públicas, sem cookies (consentv2 negado antes de o script carregar).
-// Opção B (cookies _clck/_clsk + banner) só com OK do Daniel.
-const CLARITY = '<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.crossOrigin="anonymous";t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","zd7s4jl9z8");window.clarity("consentv2",{ad_Storage:"denied",analytics_Storage:"denied"});</script>';
+// Clarity COM cookies (decisão do Daniel, 13/11, repassada pelo SEO & Growth; substitui a opção A sem cookies):
+// em todas as páginas v4, _clck/_clsk no domínio para ligar as páginas da mesma visita. O script só é pedido depois do load.
+// Nunca chamar identify/set com dado pessoal.
+const CLARITY = '<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};c.addEventListener("load",function(){t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);});})(window,document,"clarity","script","zd7s4jl9z8");</script>';
 for (const [src, dst, rod, v3, legado] of PAGINAS) {
   const m = v3 ? marcaV3 : marca;
   const topoV3 = v3 && ler(v3 === 'v4' ? 'partes/topo-v4.html' : v3 === 'en' ? 'partes/topo-v3-en.html' : 'partes/topo-v3.html').replaceAll('{{MARCA}}', m);
@@ -221,9 +222,9 @@ const csp = [
   "default-src 'none'",
   `script-src ${[...scr].join(' ')} https://*.clarity.ms`,
   `style-src ${[...sty].join(' ')}`,
-  "img-src 'self' data:",
+  "img-src 'self' data: https://*.clarity.ms https://c.bing.com",
   "font-src 'self'",
-  "connect-src 'self' https://*.clarity.ms",
+  "connect-src 'self' https://*.clarity.ms https://c.bing.com",
   "manifest-src 'self'",
   "base-uri 'none'",
   "form-action 'none'",
