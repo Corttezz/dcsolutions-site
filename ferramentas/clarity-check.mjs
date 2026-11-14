@@ -4,7 +4,7 @@ import { createRequire } from 'module';
 const require = createRequire('E:/dev/projects/Tiktok-accounts/package.json');
 const { chromium } = require('playwright-core');
 const BASE = process.argv[2].replace(/\/$/, '');
-const ROTAS = ['/', '/about', '/press', '/privacy', '/terms', '/blog/', '/blog/what-is-an-mvp', '/nao-existe'];
+const ROTAS = process.env.ROTAS ? process.env.ROTAS.split(',') : ['/', '/about', '/press', '/privacy', '/terms', '/blog/', '/blog/what-is-an-mvp', '/nao-existe'];
 const LAUNCH_OPTS = JSON.parse(process.env.LAUNCH_OPTS || '{}');
 const b = await chromium.launch(LAUNCH_OPTS);
 let falhas = 0;
