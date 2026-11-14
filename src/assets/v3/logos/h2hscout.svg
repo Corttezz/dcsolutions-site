@@ -1,4 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="H2HScout">
-  <rect width="32" height="32" rx="4" fill="#f6b73c"/>
-  <path transform="translate(4.923 4.923) scale(0.69231)" d="M3 3h7v11h12v-4h7v19h-7v-8H10v8H3Z" fill="#14201b"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" width="1024" height="1024">
+<defs>
+<linearGradient id="h2-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC85C"/><stop offset=".55" stop-color="#F6B73C"/><stop offset="1" stop-color="#E2A123"/></linearGradient>
+<radialGradient id="h2-luz" cx=".5" cy="-.05" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".6" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="h2-vinheta" cx=".5" cy=".45" r=".75"><stop offset=".65" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></radialGradient>
+<linearGradient id="h2-aro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".3" stop-color="#fff" stop-opacity=".10"/><stop offset=".85" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".30"/></linearGradient>
+<filter id="h2-sombra" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0.4375" stdDeviation="0.5" flood-color="#000" flood-opacity=".30"/></filter>
+<clipPath id="h2-clip"><rect width="32" height="32" rx="4"/></clipPath>
+<linearGradient id="h2-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22322B"/><stop offset="1" stop-color="#0F1814"/></linearGradient>
+</defs>
+<g clip-path="url(#h2-clip)">
+<rect width="32" height="32" fill="url(#h2-bg)"/>
+<g filter="url(#h2-sombra)"><path transform="translate(4.923 3.423) scale(0.69231)" d="M3 3h7v11h12v-4h7v19h-7v-8H10v8H3Z" fill="url(#h2-g)"/><g fill="#14201b" opacity="0.55"><rect x="8" y="26" width="1.4" height="3"/><rect x="12" y="26" width="1.4" height="3"/><rect x="16" y="26" width="1.4" height="4.5"/><rect x="20" y="26" width="1.4" height="3"/><rect x="24" y="26" width="1.4" height="3"/></g></g>
+<rect width="32" height="32" fill="url(#h2-vinheta)"/>
+<rect width="32" height="32" fill="url(#h2-luz)"/>
+</g>
+<rect x="0.15625" y="0.15625" width="31.6875" height="31.6875" rx="3.875" fill="none" stroke="url(#h2-aro)" stroke-width="0.3125"/>
 </svg>

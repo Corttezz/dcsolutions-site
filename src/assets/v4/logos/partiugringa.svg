@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" width="1024" height="1024">
+<defs>
+<linearGradient id="pg-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F6FBFA"/><stop offset="1" stop-color="#E4F1EE"/></linearGradient>
+<radialGradient id="pg-luz" cx=".5" cy="-.05" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".6" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="pg-vinheta" cx=".5" cy=".45" r=".75"><stop offset=".65" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></radialGradient>
+<linearGradient id="pg-aro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".3" stop-color="#fff" stop-opacity=".10"/><stop offset=".85" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".30"/></linearGradient>
+<filter id="pg-sombra" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0.4375" stdDeviation="0.5" flood-color="#000" flood-opacity=".30"/></filter>
+<clipPath id="pg-clip"><rect width="32" height="32" rx="7.25"/></clipPath>
+<linearGradient id="pg-a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#14B8A6"/></linearGradient><linearGradient id="pg-b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0D9488"/><stop offset="1" stop-color="#0B7A70"/></linearGradient>
+</defs>
+<g clip-path="url(#pg-clip)">
+<rect width="32" height="32" fill="url(#pg-bg)"/>
+<g filter="url(#pg-sombra)"><path d="M4 28L14 4L28 18L16 16L4 28Z" fill="url(#pg-a)"/><path d="M16 16L28 18L18 28L16 16Z" fill="url(#pg-b)"/></g>
+<rect width="32" height="32" fill="url(#pg-vinheta)"/>
+<rect width="32" height="32" fill="url(#pg-luz)"/>
+</g>
+<rect x="0.15625" y="0.15625" width="31.6875" height="31.6875" rx="7.125" fill="none" stroke="url(#pg-aro)" stroke-width="0.3125"/>
+</svg>

@@ -177,7 +177,7 @@ for (const [, f] of PAGINAS) {
 
 fs.cpSync(path.join(S, 'assets'), path.join(D, 'assets'), { recursive: true });
 fs.rmSync(path.join(D, 'assets/marca.svg'));
-fs.copyFileSync(path.join(S, 'assets/marca.svg'), path.join(D, 'favicon.svg'));
+fs.copyFileSync(path.join(S, 'assets/v4/marca/icon.svg'), path.join(D, 'favicon.svg')); // ícone com acabamento (13/11); o marca.svg laranja é só do cabeçalho da v2
 // /favicon.ico e /apple-touch-icon.png (pedidos automáticos dos navegadores e do iOS): o ícone com acabamento (13/11)
 fs.copyFileSync(path.join(S, 'assets/v4/marca/favicon.ico'), path.join(D, 'favicon.ico'));
 const G = path.join(R, 'gerado');
