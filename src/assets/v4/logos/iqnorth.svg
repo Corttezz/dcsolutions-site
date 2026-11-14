@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" width="1024" height="1024">
+<defs>
+<linearGradient id="iq-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A44D8"/><stop offset=".55" stop-color="#3A34C4"/><stop offset="1" stop-color="#2E2899"/></linearGradient>
+<radialGradient id="iq-luz" cx=".5" cy="-.05" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".30"/><stop offset=".6" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="iq-vinheta" cx=".5" cy=".45" r=".75"><stop offset=".65" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></radialGradient>
+<linearGradient id="iq-aro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset=".3" stop-color="#fff" stop-opacity=".10"/><stop offset=".85" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".30"/></linearGradient>
+<filter id="iq-sombra" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0.875" stdDeviation="1" flood-color="#000" flood-opacity=".30"/></filter>
+<clipPath id="iq-clip"><rect width="64" height="64" rx="15"/></clipPath>
+<linearGradient id="iq-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E6E2D8"/></linearGradient><radialGradient id="iq-dot" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#F7C46A"/><stop offset="1" stop-color="#D98E22"/></radialGradient>
+</defs>
+<g clip-path="url(#iq-clip)">
+<rect width="64" height="64" fill="url(#iq-bg)"/>
+<g filter="url(#iq-sombra)"><g transform="translate(4 4) scale(0.86)"><circle cx="29" cy="29" r="18" fill="none" stroke="url(#iq-g)" stroke-width="6.5"/><path d="M29 29 L44.5 44.5" stroke="url(#iq-g)" stroke-width="6.5" stroke-linecap="round"/><circle cx="51.5" cy="51.5" r="6.5" fill="url(#iq-dot)"/></g></g>
+<rect width="64" height="64" fill="url(#iq-vinheta)"/>
+<rect width="64" height="64" fill="url(#iq-luz)"/>
+</g>
+<rect x="0.3125" y="0.3125" width="63.375" height="63.375" rx="14.75" fill="none" stroke="url(#iq-aro)" stroke-width="0.625"/>
+</svg>

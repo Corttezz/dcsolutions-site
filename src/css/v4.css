@@ -107,7 +107,7 @@
 .grim{--sobre-tom:#1a110d}
 @media (max-width:760px){.grim .grim-logo{width:289px}}
 .p-pg{--bg:#0f2a28;--fg:#e6fffb;--fg2:rgba(230,255,251,.76);--tom:#5eead4;--sobre-tom:#062320;--palco:linear-gradient(160deg,#145a52,#0b201e)}
-.p-pg .prod-cab img{background:#062320;padding:8px}
+/* PartiuGringa: o ícone novo (13/11) já tem placa própria; sem fundo nem respiro extra */
 
 /* varal com 5 etiquetas (09/11): PartiuGringa depois do H2HScout, nas cores do card. Só na v4; a v3 (rollback) segue com 4 */
 .t-pg{--bg:#0f2a28;--fg:#e6fffb}
