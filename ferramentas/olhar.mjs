@@ -31,7 +31,7 @@ for (const pf of PERFIS) {
       window.__cls = 0;
       new PerformanceObserver((l) => { for (const e of l.getEntries()) if (!e.hadRecentInput) window.__cls += e.value; }).observe({ type: 'layout-shift', buffered: true });
     });
-    await p.goto(BASE + pg, { waitUntil: 'networkidle' });
+    await p.goto(BASE + pg, { waitUntil: 'load' });
     await p.waitForTimeout(1200);
     const tag = `${ROT}-${nome}-${pg === '/' ? 'home' : pg.replace(/\//g, '')}`;
     await p.screenshot({ path: `${OUT}/${tag}-0.png` });
