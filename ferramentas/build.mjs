@@ -224,12 +224,14 @@ fs.copyFileSync(path.join(S, 'assets/v3/og-en.jpg'), path.join(D, 'assets/v4/og.
 
 const csp = [
   "default-src 'none'",
-  `script-src ${[...scr].join(' ')} https://*.clarity.ms https://www.googletagmanager.com`,
+  // Google Ads (AW-18576616166, no GTM desde 15/11): googleadservices, googleads.g.doubleclick, ad.doubleclick, www.google.com (rmkt/ccm),
+  // td.doubleclick (frame) e o Google do país do visitante (1p-user-list) nos países mais prováveis; nos outros, só a lista de remarketing falha
+  `script-src ${[...scr].join(' ')} https://*.clarity.ms https://www.googletagmanager.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com`,
   `style-src ${[...sty].join(' ')}`,
-  "img-src 'self' data: https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net",
+  "img-src 'self' data: https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com https://ad.doubleclick.net https://www.google.com.br https://www.google.co.uk https://www.google.de https://www.google.fr https://www.google.es https://www.google.it https://www.google.pt https://www.google.nl https://www.google.pl https://www.google.ca https://www.google.com.mx https://www.google.com.ar https://www.google.cl https://www.google.com.co https://www.google.com.pe https://www.google.co.in https://www.google.com.au https://www.google.co.jp https://www.google.com.tr https://www.google.co.id",
   "font-src 'self'",
-  "connect-src 'self' https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net",
-  "frame-src https://www.googletagmanager.com",
+  "connect-src 'self' https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com https://ad.doubleclick.net",
+  "frame-src https://www.googletagmanager.com https://td.doubleclick.net",
   "manifest-src 'self'",
   "base-uri 'none'",
   "form-action 'none'",
