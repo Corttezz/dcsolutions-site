@@ -140,6 +140,10 @@ const cabecaLegadoV3 = (s) => {
 // Clarity COM cookies (decisão do Daniel, 13/11, repassada pelo SEO & Growth; substitui a opção A sem cookies):
 // em todas as páginas v4, _clck/_clsk no domínio para ligar as páginas da mesma visita. O script só é pedido depois do load.
 // Nunca chamar identify/set com dado pessoal.
+// GTM GTM-M9LX88XV (GOOGLE-1, 15/11, pedido do Daniel via SEO & Growth): Consent Mode v2 com default ANTES do GTM.
+// O site não tem banner: UE/EEE/UK/CH ficam sempre denied; o resto do mundo, granted. Nada pessoal no dataLayer.
+const GTM = "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH']});gtag('consent','default',{ad_storage:'granted',analytics_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s);j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-M9LX88XV');</script>";
+const GTM_NOSCRIPT = '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9LX88XV" height="0" width="0" title="Google Tag Manager" hidden></iframe></noscript>';
 const CLARITY = '<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};c.addEventListener("load",function(){t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);});})(window,document,"clarity","script","zd7s4jl9z8");</script>';
 for (const [src, dst, rod, v3, legado] of PAGINAS) {
   const m = v3 ? marcaV3 : marca;
@@ -159,7 +163,7 @@ for (const [src, dst, rod, v3, legado] of PAGINAS) {
     .replaceAll('{{JSONLD}}', jsonld);
   if (/\{\{[A-Z_]+\}\}/.test(s)) throw new Error('marcador sobrando em ' + nome);
   if (/ style="/.test(s)) throw new Error('style inline em ' + nome + ' (a CSP bloqueia)');
-  if (v3 === 'v4') { if (!s.includes('</head>')) throw new Error('sem </head> em ' + nome); s = s.replace('</head>', CLARITY + '</head>'); }
+  if (v3 === 'v4') { if (!s.includes('</head>')) throw new Error('sem </head> em ' + nome); s = s.replace('</head>', GTM + CLARITY + '</head>'); if (!/<body[^>]*>/.test(s)) throw new Error('sem <body> em ' + nome); s = s.replace(/<body[^>]*>/, (m) => m + GTM_NOSCRIPT); }
   // o blog não passa pelo aperto de espaços: ele comeria o espaço entre um link e o negrito do texto do post
   if (!dst.startsWith('blog/')) s = s.replace(/>\s+</g, '><');
   fs.mkdirSync(path.dirname(path.join(D, dst)), { recursive: true });
@@ -220,11 +224,12 @@ fs.copyFileSync(path.join(S, 'assets/v3/og-en.jpg'), path.join(D, 'assets/v4/og.
 
 const csp = [
   "default-src 'none'",
-  `script-src ${[...scr].join(' ')} https://*.clarity.ms`,
+  `script-src ${[...scr].join(' ')} https://*.clarity.ms https://www.googletagmanager.com`,
   `style-src ${[...sty].join(' ')}`,
-  "img-src 'self' data: https://*.clarity.ms https://c.bing.com",
+  "img-src 'self' data: https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net",
   "font-src 'self'",
-  "connect-src 'self' https://*.clarity.ms https://c.bing.com",
+  "connect-src 'self' https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://*.g.doubleclick.net",
+  "frame-src https://www.googletagmanager.com",
   "manifest-src 'self'",
   "base-uri 'none'",
   "form-action 'none'",
