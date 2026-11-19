@@ -36,14 +36,8 @@ const jsonld = JSON.stringify({
   url: 'https://dcsolutions.app/',
   logo: 'https://dcsolutions.app/assets/v4/marca/icone-512.png',
   email: 'contato@dcsolutions.app',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Rua João Pereira Neto, 20, Residencial Doutor Walchir Resende Costa',
-    addressLocality: 'Divinópolis',
-    addressRegion: 'MG',
-    postalCode: '35503-131',
-    addressCountry: 'BR',
-  },
+  // regra de 18/11 (#161): nenhum endereço postal no site; ficam razão social, CNPJ e e-mail
+  address: { '@type': 'PostalAddress', addressCountry: 'BR' },
   brand: [
     { '@type': 'Brand', name: 'IQNorth', url: 'https://iqnorth.com/' },
     { '@type': 'Brand', name: 'Fytform', url: 'https://fytform.com/' },
@@ -97,7 +91,7 @@ const jsonldV3 = JSON.stringify({
     { '@type': 'Brand', name: 'PartiuGringa' },
   ],
 });
-// JSON-LD da v4: sem a cidade (o endereço completo fica só na linha legal do rodapé), IQNorth em inglês e PartiuGringa no ar (09/11)
+// JSON-LD da v4: só o país no endereço, IQNorth em inglês e PartiuGringa no ar (09/11)
 const jsonldV4 = JSON.stringify({
   ...JSON.parse(jsonldV3),
   url: 'https://dcsolutions.app/',
@@ -200,7 +194,7 @@ fs.writeFileSync(path.join(D, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: 
 const sitemap = (us, lm = {}) => '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
   us.map((u) => `<url><loc>https://dcsolutions.app/${u}</loc>${lm[u] ? `<lastmod>${lm[u]}</lastmod>` : ''}</url>`).join('') + '</urlset>\n';
 // lastmod (SEO DC-11): data real da última mudança de cada página. ATUALIZE ao publicar mudança na página.
-const LASTMOD_V4 = { '': '2026-11-13', privacy: '2026-11-13', terms: '2026-11-13', about: '2026-11-13', press: '2026-11-13' };
+const LASTMOD_V4 = { '': '2026-11-13', privacy: '2026-11-18', terms: '2026-11-13', about: '2026-11-13', press: '2026-11-13' };
 // blog: cada post com lastmod (atualizado ou data); o índice /blog/ só entra quando houver post (sem post ele tem noindex)
 const blogUrls = POSTS.map((p) => `blog/${p.slug}`);
 for (const p of POSTS) LASTMOD_V4[`blog/${p.slug}`] = p.atualizado || p.data;

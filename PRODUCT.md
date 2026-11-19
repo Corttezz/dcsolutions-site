@@ -40,7 +40,7 @@ Small products, each made to solve one thing, built and run end to end by the sa
 - Name "DC Solutions"; logo "Anel" (approved 2026-11-08). The visual system in code (indigo/cotton palette, Barlow and Barlow Condensed) is the incumbent authority.
 - English only, no language switcher.
 - "Who is behind it": only the name Daniel Cortez, no photo, no links.
-- The city (Divinópolis) appears only in the legal footer line (company name, CNPJ, address).
+- No postal address anywhere (rule of 2026-11-18): the legal footer shows only the company name, the CNPJ and the contact email. The city (Divinópolis) appears only in the jurisdiction clause of /terms.
 - Never mention Steam. H2HScout images without club crests and without "Cartola"/"Apostas" or the Brasileirão seal.
 
 ## Evidence on Hand
