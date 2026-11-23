@@ -1,18 +1,19 @@
 ---
-titulo: "What is an MVP? Meaning, examples and how to build one"
-descricao: "What is an MVP? The meaning of minimum viable product, how it differs from a prototype, common types with examples and how to tell if your MVP worked."
+titulo: "What is an MVP in software? Meaning, model and examples"
+descricao: "What is an MVP in software? Meaning of minimum viable product, the build-measure-learn model, design thinking, real examples and what drives the cost."
 slug: "what-is-an-mvp"
 idioma: "en"
 palavra_chave: "what is an mvp"
 categoria: "Product"
 data: "2026-11-13"
+atualizado: "2026-11-23"
 imagem: "/assets/blog/what-is-an-mvp.jpg | Blueprint drawing of a simple working machine next to a far more complex version of the same machine"
-links_internos: ["/", "/#products", "/blog/", "/#iqnorth", "/#partiugringa", "/#h2hscout", "/#runemoire"]
+links_internos: ["/", "/#products", "/blog/", "/#iqnorth", "/#partiugringa", "/#runemoire"]
 cta: "/#products"
 ---
-# What is an MVP? Meaning, examples and how to build one
+# What is an MVP in software? Meaning, model and examples
 
-*Updated on 2026-11-13*
+*Updated on 2026-11-23*
 
 An MVP, or **minimum viable product**, is the smallest version of a product that lets you learn whether people actually want it. It is not a cheap or broken version of the final product. It is an experiment that happens to be usable.
 
@@ -42,6 +43,22 @@ In app development, that usually means:
 - **basic analytics** from day one, so you can see what people actually do.
 
 What it does not mean: skipping security, privacy or basic quality. A product that loses data or breaks on sign up teaches you nothing about demand.
+
+## What is the full form of MVP and what does it mean?
+
+The full form of MVP in software is minimum viable product. It means the smallest working version of a product that real users can try, built to test one main assumption. (In sports, MVP means most valuable player, but in product and app development it always means minimum viable product.)
+
+## What is the MVP model: build, measure, learn?
+
+The MVP model is the build-measure-learn loop from the lean startup method. You build the smallest version that tests an assumption, measure what users actually do, and learn whether to keep going, change direction or stop. Then you repeat the loop with the next riskiest assumption.
+
+- **Build:** the smallest product that can test the assumption.
+- **Measure:** behavior such as activation, retention and referrals, not opinions.
+- **Learn:** compare the numbers with the success threshold you set before launch.
+
+## What is an MVP in design thinking?
+
+In design thinking, an MVP is the testing stage: a basic working version used to see how real people react before the team commits to a full build. Design thinking asks "is this desirable?" through empathy and prototypes; the MVP then checks whether people use and value the solution in real conditions.
 
 ## What is the difference between an MVP and a prototype?
 
@@ -78,6 +95,10 @@ Start by writing down the one assumption that would sink the idea if it were fal
 6. **Talk to users and read the data.** Behavior beats compliments.
 7. **Decide.** Keep building, change direction (a pivot) or stop.
 
+## How much does an MVP cost?
+
+The cost of an MVP depends on scope, platforms, how much can be done by hand at first, the integrations needed and who builds it. A narrow single-flow product costs far less than one with many features on several platforms. If you want to talk about your own idea, [contact DC Solutions](mailto:contato@dcsolutions.app).
+
 ## How do you know if an MVP worked?
 
 An MVP worked if it answered the question it was built to test, even when the answer is no. Look at behavior, not compliments: people finishing the main task, coming back without reminders, recommending it or paying. A clear "no one wants this" found early is a successful MVP, because it saves months of building.
@@ -94,21 +115,23 @@ Set the thresholds yourself before launch. There is no universal "good" number; 
 
 ## What does an MVP look like in practice?
 
-In practice, an MVP is a focused product that does one thing for one audience and gets better from real use. At DC Solutions, each product in our showcase solves a single problem, and they sit at different stages: some are live, one is in closed beta and one is still in development.
+In practice, an MVP is a focused product that does one thing for one audience and gets better from real use. At DC Solutions, each product in our showcase solves a single problem, and they sit at different stages: some are live and one is still in development.
 
 DC Solutions answers this question with its own products: you can open each one and see what "one problem, solved well" looks like at a different point of a product's life.
 
 {{CTA}}
 
-- **[IQNorth](/#iqnorth)** (live): an online IQ test that reports an estimate with a confidence range instead of a single number. See it at [iqnorth.com](https://iqnorth.com/).
-- **Fytform** (live): a workout and diet plan built from a short questionnaire, at [fytform.com](https://fytform.com/en/).
-- **[PartiuGringa](/#partiugringa)** (live): international jobs for Brazilian developers, with an AI review of your LinkedIn profile, at [partiugringa.com](https://partiugringa.com/).
-- **[H2HScout](/#h2hscout)** (closed beta): Brasileirão Série A statistics adjusted for opponent strength, at [h2hscout.com](https://h2hscout.com/).
+- **[IQNorth](https://iqnorth.com/en/)** (live): an online IQ test that reports an estimate with a confidence range instead of a single number. See it at [iqnorth.com](https://iqnorth.com/).
+- **[Fytform](https://fytform.com/en/)** (live): a workout and diet plan built from a short questionnaire, at [fytform.com](https://fytform.com/en/).
+- **[PartiuGringa](https://partiugringa.com/)** (live): international jobs for Brazilian developers, with an AI review of your LinkedIn profile, at [partiugringa.com](https://partiugringa.com/).
 - **[Runemoire](/#runemoire)** (in development): a pixel art roguelike deckbuilder for PC, at [runemoire.com](https://runemoire.com/).
 
 See all of them on the [DC Solutions home page](/) or in the [products section](/#products). More product guides are on the [DC Solutions blog](/blog/).
 
 ## Frequently asked questions
+
+### What is an example of an MVP?
+A landing page that describes a product and collects sign-ups is the simplest example. Another is a concierge MVP, where the team delivers the service by hand to a few users before building any automation. Both test demand before a full build.
 
 ### Who coined the term MVP?
 The term was coined in 2001 by Frank Robinson and later popularized by Steve Blank and Eric Ries, whose 2009 definition is the one most people quote today.
